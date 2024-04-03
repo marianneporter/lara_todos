@@ -21,13 +21,12 @@ class TodoListSeeder extends Seeder
            $todoLists = TodoList::factory()->count(5)->create([
             'user_id' => $user->id,
            ]);
-        }        
-        
-        foreach ($todoLists as $todoList) {
-            \App\Models\Todo::factory()->count(10)->create([
-                'todo_list_id' => $todoList->id, 
-            ]);
-        }
-  
+                   
+            foreach ($todoLists as $todoList) {
+                \App\Models\Todo::factory()->count(10)->create([
+                    'todo_list_id' => $todoList->id, 
+                ]);
+            }
+        }   
     }
 }

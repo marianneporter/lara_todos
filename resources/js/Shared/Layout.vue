@@ -3,23 +3,25 @@
    <div id="app" class="bg-gradient-to-b from-sky-400 to-sky-700 
                         text-white w-full min-h-screen">
         <header>     
-            <nav class="bg-gray-800 text-white py-4 px-8 flex justify-between">
-                <ul class="main-nav">
-                    <li>Lara Todos</li>
-                </ul>
-                <div class="flex gap-4">
-                    <Link href="#">Register</Link>
-                    <Link href="#">Login</Link>
-                </div>          
-            </nav> 
+            <Nav />
         </header>
     <main >
-    
+        <!-- <div v-if="flash.message" class="flash-message">{{ flash.message }}</div> -->
         <slot></slot>
     </main>
 
    </div> 
-
-
 </template>
 
+<script setup>
+    import Nav from '@/Shared/Nav.vue'
+
+//    import { usePage } from '@inertiajs/vue3'
+  
+//    import { computed } from 'vue'
+
+ //   const { props } = usePage()
+ //   const flash = props.value.flash;
+ //   console.log(page.props.value)
+
+</script>

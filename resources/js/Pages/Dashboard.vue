@@ -19,12 +19,26 @@
 </template>
 
 <script setup>
-    import Layout from '@/Shared/Layout.vue'
-
-    
+    import Layout from '@/Shared/Layout.vue'    
+    import { onMounted } from 'vue'
+    import { usePage } from '@inertiajs/vue3'
+ 
   
     const props = defineProps({
-        message: String
+        message: String,
+        todoLists: Object
     })
+
+    console.log(props.todoLists)
+
+
+
+    // onMounted(() => {
+    //   console.log('Component is now mounted!');
+    //   console.log(todoLists)
+    // });
+
+
+   
 
 </script>
