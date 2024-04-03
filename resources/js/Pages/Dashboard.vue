@@ -19,7 +19,9 @@
 </template>
 
 <script setup>
-    import Layout from '@/Shared/Layout.vue'    
+    
+    import Layout from '@/Shared/Layout.vue' 
+    import { useTodoListStore } from '@/Stores/todoListStore'   
     import { onMounted } from 'vue'
     import { usePage } from '@inertiajs/vue3'
  
@@ -29,7 +31,9 @@
         todoLists: Object
     })
 
-    console.log(props.todoLists)
+    const todoListStore = useTodoListStore()
+    todoListStore.setTodoLists(props.todoLists)
+    console.log(todoListStore.todoLists)
 
 
 
