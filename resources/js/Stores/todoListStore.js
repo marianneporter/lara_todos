@@ -3,31 +3,37 @@ import { defineStore } from 'pinia'
 export const useTodoListStore = defineStore('taskStore', {
     state: () => ({
         todoLists: [],
-        listSelected: 'All'
+        listSelected: 'All',        
     }),
     getters: {
         getTodoListNames() {                            
             return this.todoLists.map(tdl => tdl.name)
         },
 
-        getTodosForList(todoListId) {   
+        getTodoListOptions() {
+            return [ 'All', ...this.getTodoListNames ] 
+        },
+
+        getTodosForList() {            
             let currentToDoList
-             = this.todoLists.find(t => t.id === todoListId)
-            return currentToDoList.todos 
+             = this.todoLists.find(t => t.name === this.listSelected)        
+            return currentToDoList.todos ?  currentToDoList.todos : []
         },  
 
-        getTodosAllLists() {         
+        getTodosAllLists() {              
             let allTodos = [];
             this.todoLists.forEach(t => {
                 allTodos.push(...t.todos)
-            })    
-        //    console.log(allTodos)      
+            })       
             return allTodos
         },              
     },
     actions: {
         setTodoLists(todoLists) {
             this.todoLists = todoLists
+        },
+        setListSelected(newList) {
+            this.listSelected = newList
         }
     } 
 })

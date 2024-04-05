@@ -14,11 +14,16 @@ class TodoListFactory extends Factory
      *
      * @return array<string, mixed>
      */
+
+ 
+
     public function definition(): array
     {
-        return [
-            'name' => $this->faker->words(3, true), 
+       
+        return [          
             'user_id' => \App\Models\User::factory(),
         ];
     }
+
+
 }

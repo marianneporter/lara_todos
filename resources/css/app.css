@@ -7,5 +7,14 @@
 }   
 
 .list-entry-card {
-    @apply bg-white rounded-lg shadow-md p-4 mt-2
+    @apply bg-white rounded-lg shadow-md p-4 mt-2 w-full text-left
 }
+
+.list-entry-card-selected {
+    @apply bg-sky-200 rounded-lg shadow-md p-4 mt-2 w-full text-left
+}
+
+.list-heading {
+    @apply text-blue-950 text-lg font-semibold
+}
+
