@@ -2,7 +2,9 @@ import './bootstrap';
 import { createApp, h } from 'vue';
 import { createInertiaApp, Link } from '@inertiajs/vue3';
 import { ZiggyVue } from "../../vendor/tightenco/ziggy/dist/index.esm";
-import { createPinia } from 'pinia'; // Import createPinia
+import { createPinia } from 'pinia'; 
+import '@fortawesome/fontawesome-free/css/all.min.css';
+
 import '../css/app.css';
 
 createInertiaApp({

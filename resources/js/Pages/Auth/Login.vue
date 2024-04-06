@@ -29,8 +29,8 @@
                 </div>  
                 <div class="mb-6">
                     <button type="submit"
-                            class="bg-orange-500 text-white rounded py-2 px-4 w-full
-                                    hover:bg-orange-600" :disabled="form.processing" >Login
+                            class="primary-btn w-full"
+                             :disabled="form.processing" >Login
                     </button>
                 </div>  
                  

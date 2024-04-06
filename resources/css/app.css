@@ -18,3 +18,8 @@
     @apply text-blue-950 text-lg font-semibold
 }
 
+.primary-btn {
+   @apply bg-orange-500 text-white rounded py-2 px-4 
+           hover:bg-orange-600
+}
+

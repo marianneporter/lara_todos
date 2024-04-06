@@ -4,8 +4,28 @@
                 <h1>Welcome to the Laravel Todo List App</h1>
              
                 <div class="flex w-full text-black gap-4 min-h-full">
-                    <section class="flex-1 section-card ">                                     
-                        <h3 class="list-heading">My Lists</h3>
+                    <section class="flex-1 section-card ">   
+                        <header class="flex justify-between">
+                            <h3 class="list-heading">My Lists</h3>
+                            <button class="cursor-pointer"><i class="fa-solid fa-plus"></i> Add new list</button>
+                        </header>
+                       
+                        <form @submit.prevent="addNewList" 
+                              class="bg-white my-2 flex justify-between items-center rounded-lg overflow-hidden">
+    
+                            <input type="text" 
+                                   class="flex-grow py-3 pl-4 pr-2 rounded-l-lg border-r-0 
+                                          focus:outline-none focus:ring-0" 
+                                   placeholder="New List Name">
+   
+                                  <button class="px-6 py-3 bg-orange-500 text-white focus:outline-none
+                                              hover:bg-orange-600 transition-colors">Add New List
+                                  </button>
+                        </form>                       
+                        
+                          
+                                                    
+
                         <div v-for="name in getTodoListOptions" :key="name">
                           
                             <button :class="[ listSelected == name ? 
@@ -15,7 +35,9 @@
                                  {{ name }}                              
                             </button> 
 
-                        </div>                       
+                        </div>   
+
+
                     </section>
                     <section class="flex-1 section-card">
                         <h3 class="list-heading">Tasks for: {{listSelected}}
