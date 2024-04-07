@@ -7,24 +7,13 @@
                     <section class="flex-1 section-card ">   
                         <header class="flex justify-between">
                             <h3 class="list-heading">My Lists</h3>
-                            <button class="cursor-pointer"><i class="fa-solid fa-plus"></i> Add new list</button>
-                        </header>
-                       
-                        <form @submit.prevent="addNewList" 
-                              class="bg-white my-2 flex justify-between items-center rounded-lg overflow-hidden">
-    
-                            <input type="text" 
-                                   class="flex-grow py-3 pl-4 pr-2 rounded-l-lg border-r-0 
-                                          focus:outline-none focus:ring-0" 
-                                   placeholder="New List Name">
-   
-                                  <button class="px-6 py-3 bg-orange-500 text-white focus:outline-none
-                                              hover:bg-orange-600 transition-colors">Add New List
-                                  </button>
-                        </form>                       
+                            <button v-if="showAddFormBtn" @click="showAddListForm" class="cursor-pointer">
+                                <i class="fa-solid fa-plus"></i> Add new list
+                            </button>
+                        </header>                       
                         
-                          
-                                                    
+                        <AddListForm ref="addListFormRef"
+                                     @formClosed="showAddFormBtn = true"/>                                                    
 
                         <div v-for="name in getTodoListOptions" :key="name">
                           
@@ -34,7 +23,6 @@
                                  @click="changeSelectedList(name)">                                                                   
                                  {{ name }}                              
                             </button> 
-
                         </div>   
 
 
@@ -63,15 +51,27 @@
 <script setup>
     
     import Layout from '@/Shared/Layout.vue' 
+    import AddListForm from '@/Components/addListForm.vue'
     import { useTodoListStore } from '@/Stores/todoListStore'   
     import { storeToRefs } from 'pinia'
-    import { computed } from 'vue';
+    import { computed, ref } from 'vue';
   
+    const addListFormRef = ref(null);
+
+    const showAddFormBtn = ref(true);
+
     const props = defineProps({
         message: String,
         todoLists: Object
-    })    
-
+    })   
+    
+    const showAddListForm = () => {
+        showAddFormBtn.value = false
+        if (addListFormRef.value) {
+            addListFormRef.value.makeFormVisible();
+        }
+    }
+    
     const todos = computed(() => {
         if (listSelected.value == 'All' ) { 
             return todoListStore.getTodosAllLists
@@ -95,7 +95,5 @@
 </script>
 
 <style scoped>
-    .active {
-        background-color: red;
-    }
+
 </style>
