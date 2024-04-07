@@ -7,15 +7,17 @@
         </header>
     <main >
         <!-- <div v-if="flash.message" class="flash-message">{{ flash.message }}</div> -->
-        <slot></slot>
-    </main>
+        <slot></slot>        
+    </main> 
+
+    <Toast />  
 
    </div> 
 </template>
 
 <script setup>
     import Nav from '@/Shared/Nav.vue'
-
+    import Toast from 'primevue/toast';
 //    import { usePage } from '@inertiajs/vue3'
   
 //    import { computed } from 'vue'

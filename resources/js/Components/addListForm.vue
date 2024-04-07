@@ -18,13 +18,9 @@
                     <i class="fa-solid fa-xmark"></i>
                 </button>
             </div>
-
-
             <button class="px-6 py-3 bg-orange-500 text-white focus:outline-none
                          hover:bg-orange-600 transition-colors">Add New List
             </button>
-
-
        </form>      
     </transition>
     
@@ -33,6 +29,7 @@
 <script setup>
     import axios from 'axios'
     import { useTodoListStore } from '@/Stores/todoListStore'
+    import { useToast } from 'primevue/usetoast'
     import { ref } from 'vue'
     
     const props= defineProps({
@@ -65,14 +62,33 @@
             const response = await axios.post('/todo-lists', {
                name: form.value.name,
             })          
-            todoListStore.addList(response.data.addedTodoList)
-            console.log('List added successfully')
+            todoListStore.addList(response.data.addedTodoList)         
+            showSuccess(form.value.name)
             form.value.name = '' 
             closeForm()
         } catch (error) {
-            console.error('Error adding list:', error.response.data)          
+            showError(form.value.name)
+            form.value.name = '' 
+            closeForm()                  
         }
     }
+
+    const toast = useToast()
+    const showSuccess = (listName) => {    
+        toast.add({severity:'success', 
+                   summary: 'Success!',
+                   detail: `The ${listName} list has been added`, 
+                   life: 6000
+                   });
+    }
+
+    const showError = (listName) => {    
+        toast.add({severity:'error', 
+                   summary: 'Something went Wrong',
+                   detail: `Unable to add ${listName}`                 
+        });
+    }
+   
 
 </script>
 
@@ -83,5 +99,6 @@
     .scale-enter-from, .scale-leave-to {
         transform: scale(0.95);
         opacity: 0;
-    }
+    }   
+
 </style>

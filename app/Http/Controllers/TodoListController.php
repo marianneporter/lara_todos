@@ -20,9 +20,8 @@ class TodoListController extends Controller
 
         $list->load('todos');
 
-        return response()->json([
-            'message' => 'List successfully added!',
-            'addedTodoList' => $list,
+        return response()->json([          
+            'addedTodoList' => $list
         ]);
     }
 }

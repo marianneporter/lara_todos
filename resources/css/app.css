@@ -23,3 +23,8 @@
            hover:bg-orange-600
 }
 
+/* custom style for PrimeVue Toasts */
+.p-toast {
+    opacity: 1 !important;
+}
+
