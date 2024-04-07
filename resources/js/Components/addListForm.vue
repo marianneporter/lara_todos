@@ -6,6 +6,7 @@
 
             <div class="relative flex-grow">
                 <input type="text" 
+                    v-model="form.name"
                     class=" py-3 pl-4 pr-2 rounded-l-lg border-r-0 
                             focus:outline-none focus:ring-0" 
                     placeholder="New List Name">
@@ -30,7 +31,8 @@
 </template>
 
 <script setup>
-
+    import axios from 'axios'
+    import { useTodoListStore } from '@/Stores/todoListStore'
     import { ref } from 'vue'
     
     const props= defineProps({
@@ -38,9 +40,10 @@
     }) 
 
     const emits = defineEmits(['formClosed'])
+   
+    const form = ref({ name: '' })
 
     const isFormVisible = ref(false)
-    
     const makeFormVisible = () => {
       isFormVisible.value = true;     
     };
@@ -50,12 +53,26 @@
       emits('formClosed')
     };
 
-
    // Expose the toggleFormVisibility so it can be accessed from dashboard
     defineExpose({
         makeFormVisible
-    })
+    }) 
 
+    const todoListStore = useTodoListStore()
+  
+    const addNewList = async () => {
+        try {
+            const response = await axios.post('/todo-lists', {
+               name: form.value.name,
+            })          
+            todoListStore.addList(response.data.addedTodoList)
+            console.log('List added successfully')
+            form.value.name = '' 
+            closeForm()
+        } catch (error) {
+            console.error('Error adding list:', error.response.data)          
+        }
+    }
 
 </script>
 

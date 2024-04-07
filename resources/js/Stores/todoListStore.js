@@ -21,11 +21,11 @@ export const useTodoListStore = defineStore('taskStore', {
         },  
 
         getTodosAllLists() {              
-            let allTodos = [];
-            this.todoLists.forEach(t => {
+            let allTodos = [];   
+            this.todoLists.forEach(t => {                
                 allTodos.push(...t.todos)
             })       
-            return allTodos
+            return allTodos    
         },              
     },
     actions: {
@@ -34,6 +34,9 @@ export const useTodoListStore = defineStore('taskStore', {
         },
         setListSelected(newList) {
             this.listSelected = newList
-        }
+        },
+        addList(todoList) {         
+            this.todoLists.unshift(todoList)
+        },        
     } 
 })
