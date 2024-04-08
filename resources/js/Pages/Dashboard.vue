@@ -15,18 +15,35 @@
                         <AddListForm ref="addListFormRef"
                                      @formClosed="showAddFormBtn = true"/>                                                    
 
-                        <div v-for="name in getTodoListOptions" :key="name">
-                          
-                            <button :class="[ listSelected == name ? 
-                                          'list-entry-card-selected' : 'list-entry-card']"                              
-                                 :disabled="listSelected == name"
-                                 @click="changeSelectedList(name)">                                                                   
-                                 {{ name }}                              
-                            </button> 
+                        <div v-for="name in getTodoListOptions" :key="name" >
+                            <div  :class="[ listSelected == name ? 
+                                        'list-entry-card-selected' : 'list-entry-card']" 
+                                   class="flex gap-2">
+
+                                <!-- editing mode -->
+                                <div v-if="editingListName === name" class="flex-1">
+                                    <input type="text" v-model="editedText" class="w-full p-1" />
+                                    <button @click="saveListEdit(name)" class="p-2">Save</button>
+                                    <button @click="cancelListEdit" class="p-2">Cancel</button>
+                                </div>
+
+                                <!-- list mode -->
+                                <div v-else class="flex w-full">                                 
+
+                                    <button class="flex-grow flex-shrink-0 basis-0 text-left"
+                                        :disabled="listSelected == name"
+                                        @click="changeSelectedList(name)">                                                                   
+                                        {{ name }}                              
+                                    </button> 
+
+                                    <button @click="editListName"><i class="fa-regular fa-pen-to-square"></i></button>
+                                    <button><i class="fa-solid fa-trash-can"></i></button>                                
+  
+                                </div>   
+                            </div> 
                         </div>   
-
-
                     </section>
+
                     <section class="flex-1 section-card">
                         <h3 class="list-heading">Tasks for: {{listSelected}}
                             List<span v-if="listSelected == 'All'">s</span></h3>
@@ -35,6 +52,7 @@
                                 <div v-for="todo in todos" :key="todo.id">
                                     <div class="list-entry-card">
                                         <div>{{ todo.task }}</div>
+    
                                     </div>                               
                                 </div>                                   
                             </div> 
@@ -90,8 +108,35 @@
             
     const changeSelectedList = (newList) => {
         todoListStore.setListSelected(newList)  
-    }     
- 
+    }    
+    
+    const editingListName = ref(null);
+    const editedListText = ref('');
+
+    // Edit button handler
+    const editListName = (name, event) => {
+        editingListName.value = name;
+        editedListText.value = name;    
+        event.stopPropagation();
+    };
+
+    // Save button handler
+    const saveListEdit = (name) => {
+        // Implement saving logic here
+        // For demonstration, let's just log the edited text
+        console.log(`Saving '${editedListText.value}'`);
+
+        // Reset editing state
+        editingListName.value = null;
+        editedListText.value = '';
+    };
+
+    // Cancel button handler
+    const cancelListEdit = () => {
+        editingListName.value = null;
+        editedListText.value = '';
+    };
+        
 </script>
 
 <style scoped>
