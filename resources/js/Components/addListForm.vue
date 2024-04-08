@@ -7,6 +7,7 @@
             <div class="relative flex-grow">
                 <input type="text" 
                     v-model="form.name"
+                    @input="hideErrorToast"
                     class=" py-3 pl-4 pr-2 rounded-l-lg border-r-0 
                             focus:outline-none focus:ring-0" 
                     placeholder="New List Name">
@@ -39,11 +40,16 @@
     const emits = defineEmits(['formClosed'])
    
     const form = ref({ name: '' })
+    let formErrors = {}
 
     const isFormVisible = ref(false)
     const makeFormVisible = () => {
       isFormVisible.value = true;     
     };
+
+    const toast = useToast()
+    const isErrorToastVisible = ref(false)
+    const errorToastKey = 'errorToastKey'    
     
     const closeForm = () => {
       isFormVisible.value = false; 
@@ -66,14 +72,33 @@
             showSuccess(form.value.name)
             form.value.name = '' 
             closeForm()
-        } catch (error) {
-            showError(form.value.name)
-            form.value.name = '' 
-            closeForm()                  
+        }
+        catch (error) { 
+            //handle validation errors
+            if (error.response && error.response.status === 422 && error.response.data.errors)
+            {     
+                formErrors = getValidationErrors(error.response.data.errors)
+                console.log(formErrors)
+                
+                toast.add({severity:'error', 
+                    summary: 'Error!',                              
+                    detail: `${formErrors.name}`,
+                    key: errorToastKey                   
+               });            
+               isErrorToastVisible.value = true
+            } else { 
+                //handle any other errors from axios call     
+                toast.add({severity:'error', 
+                    summary: 'Something went Wrong',
+                    detail: `Unable to add ${form.value.name} list`                 
+                });
+                form.value.name = ''; 
+                closeForm();
+            }
+               
         }
     }
-
-    const toast = useToast()
+ 
     const showSuccess = (listName) => {    
         toast.add({severity:'success', 
                    summary: 'Success!',
@@ -82,11 +107,19 @@
                    });
     }
 
-    const showError = (listName) => {    
-        toast.add({severity:'error', 
-                   summary: 'Something went Wrong',
-                   detail: `Unable to add ${listName}`                 
-        });
+    const getValidationErrors = (errors) => {
+        let validationErrors = new Object()
+        Object.keys(errors).forEach((inputName) => {
+            validationErrors[inputName] = errors[inputName][0] 
+        })
+        return validationErrors
+    }
+
+    const hideErrorToast = () => {
+        if (isErrorToastVisible.value) {   
+            toast.remove(errorToastKey);
+            isErrorToastVisible.value = false;
+        }  
     }
    
 

@@ -10,7 +10,7 @@
         <slot></slot>        
     </main> 
 
-    <Toast />  
+    <Toast position="top-center" />  
 
    </div> 
 </template>
