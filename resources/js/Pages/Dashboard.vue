@@ -23,7 +23,9 @@
                                 <!-- editing mode -->
                                 <div v-if="currentEditListName === name" class="flex-1 flex flex-col">
                                     <div class="relative">
-                                        <input type="text" v-model="amendedListName" class="w-full p-1" />
+                                        <input type="text" v-model="amendedListName"
+                                               class="w-full p-1 border-2 focus:outline-none focus:border-sky-600 rounded"
+                                               />
                                         <i class="fa-regular fa-pen-to-square absolute right-2 top-1/2
                                                   transform -translate-y-1/2"></i>
                                     </div>
@@ -32,7 +34,6 @@
                                         <button @click="cancelListEdit" class="secondary-btn p-2">Cancel</button>
                                         <button @click="saveListEdit(name)" class="primary-btn ml-2 p-2">Save</button>                                       
                                     </div>
-
                                 </div>
 
                                 <!-- list mode -->
