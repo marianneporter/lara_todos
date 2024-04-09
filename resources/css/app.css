@@ -19,9 +19,15 @@
 }
 
 .primary-btn {
-   @apply bg-orange-500 text-white rounded py-2 px-4 
+   @apply bg-orange-500 text-white rounded py-2 px-4 min-w-20
            hover:bg-orange-600
 }
+
+.secondary-btn {
+    @apply bg-gray-500 text-white rounded py-2 px-4 
+            hover:bg-gray-600
+ }
+ 
 
 /* custom style for PrimeVue Toasts */
 .p-toast {

@@ -21,14 +21,22 @@
                                    class="flex gap-2">
 
                                 <!-- editing mode -->
-                                <div v-if="editingListName === name" class="flex-1">
-                                    <input type="text" v-model="editedText" class="w-full p-1" />
-                                    <button @click="saveListEdit(name)" class="p-2">Save</button>
-                                    <button @click="cancelListEdit" class="p-2">Cancel</button>
+                                <div v-if="currentEditListName === name" class="flex-1 flex flex-col">
+                                    <div class="relative">
+                                        <input type="text" v-model="amendedListName" class="w-full p-1" />
+                                        <i class="fa-regular fa-pen-to-square absolute right-2 top-1/2
+                                                  transform -translate-y-1/2"></i>
+                                    </div>
+                                   
+                                    <div class="self-end mt-2 gap-3">
+                                        <button @click="cancelListEdit" class="secondary-btn p-2">Cancel</button>
+                                        <button @click="saveListEdit(name)" class="primary-btn ml-2 p-2">Save</button>                                       
+                                    </div>
+
                                 </div>
 
                                 <!-- list mode -->
-                                <div v-else class="flex w-full">                                 
+                                <div v-else class="flex w-full gap-3">                                 
 
                                     <button class="flex-grow flex-shrink-0 basis-0 text-left"
                                         :disabled="listSelected == name"
@@ -36,7 +44,7 @@
                                         {{ name }}                              
                                     </button> 
 
-                                    <button @click="editListName"><i class="fa-regular fa-pen-to-square"></i></button>
+                                    <button @click="editListName($event, name)"><i class="fa-regular fa-pen-to-square"></i></button>
                                     <button><i class="fa-solid fa-trash-can"></i></button>                                
   
                                 </div>   
@@ -110,13 +118,15 @@
         todoListStore.setListSelected(newList)  
     }    
     
-    const editingListName = ref(null);
-    const editedListText = ref('');
+    const currentEditListName = ref(null);
+    const amendedListName = ref('');
 
     // Edit button handler
-    const editListName = (name, event) => {
-        editingListName.value = name;
-        editedListText.value = name;    
+    const editListName = (event, name) => {
+        currentEditListName.value = name;
+        amendedListName.value = name;   
+        listSelected.value = name;
+        console.log(event, name); 
         event.stopPropagation();
     };
 
@@ -124,17 +134,17 @@
     const saveListEdit = (name) => {
         // Implement saving logic here
         // For demonstration, let's just log the edited text
-        console.log(`Saving '${editedListText.value}'`);
+        console.log(`Saving '${amendedListName.value}'`);
 
         // Reset editing state
-        editingListName.value = null;
-        editedListText.value = '';
+        currentEditListName.value = null;
+        amendedListName.value = '';
     };
 
     // Cancel button handler
     const cancelListEdit = () => {
-        editingListName.value = null;
-        editedListText.value = '';
+        currentEditListName.value = null;
+        amendedListName.value = '';
     };
         
 </script>
