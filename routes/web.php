@@ -11,6 +11,8 @@ Route::get('/', [DashboardController::class, 'index'])
 
 Route::post('/todo-lists', [TodoListController::class, 'store'])
              ->name('todo-lists.store');
+Route::patch('/todo-lists/{todoList}', [TodoListController::class, 'update'])
+             ->name('todo-lists.update');
 
 Route::get('login', [LoginController::class, 'create'])->name('login');
 Route::post('login', [LoginController::class, 'authenticate'])->name('authenticate');

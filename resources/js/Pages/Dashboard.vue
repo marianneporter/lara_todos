@@ -15,37 +15,40 @@
                         <AddListForm ref="addListFormRef"
                                      @formClosed="showAddFormBtn = true"/>                                                    
 
-                        <div v-for="name in getTodoListOptions" :key="name" >
-                            <div  :class="[ listSelected == name ? 
+                        <div v-for="list in getListDataOptions" :key="list.id" >
+                            <div  :class="[ listSelected.name == list.name ? 
                                         'list-entry-card-selected' : 'list-entry-card']" 
                                    class="flex gap-2">
 
                                 <!-- editing mode -->
-                                <div v-if="currentEditListName === name" class="flex-1 flex flex-col">
-                                    <div class="relative">
-                                        <input type="text" v-model="amendedListName"
-                                               class="w-full p-1 border-2 focus:outline-none focus:border-sky-600 rounded"
-                                               />
-                                        <i class="fa-regular fa-pen-to-square absolute right-2 top-1/2
-                                                  transform -translate-y-1/2"></i>
-                                    </div>
+                                <div v-if="currentEditListId && currentEditListId === list.id" class="flex-1">
+                                    <form @submit.prevent="updateList(list.id)" class="flex flex-col" >
+                                        <div class="relative">
+                                            <input type="text" v-model="listAmendForm.name"
+                                                class="w-full p-1 border-2 focus:outline-none focus:border-sky-600 rounded"
+                                                />
+                                            <i class="fa-regular fa-pen-to-square absolute right-2 top-1/2
+                                                    transform -translate-y-1/2"></i>
+                                        </div>
                                    
-                                    <div class="self-end mt-2 gap-3">
-                                        <button @click="cancelListEdit" class="secondary-btn p-2">Cancel</button>
-                                        <button @click="saveListEdit(name)" class="primary-btn ml-2 p-2">Save</button>                                       
-                                    </div>
+                                        <div class="self-end mt-2 gap-3">
+                                            <button @click="cancelListEdit" class="secondary-btn p-2">Cancel</button>
+                                            <button type="submit" class="primary-btn ml-2 p-2">Save</button>                                       
+                                        </div>
+                                    </form>
+
                                 </div>
 
                                 <!-- list mode -->
                                 <div v-else class="flex w-full gap-3">                                 
 
                                     <button class="flex-grow flex-shrink-0 basis-0 text-left"
-                                        :disabled="listSelected == name"
-                                        @click="changeSelectedList(name)">                                                                   
-                                        {{ name }}                              
+                                        :disabled="listSelected.id == list.id"
+                                        @click="changeSelectedList(list)">                                                                   
+                                        {{ list.name }}                              
                                     </button> 
 
-                                    <button @click="editListName($event, name)"><i class="fa-regular fa-pen-to-square"></i></button>
+                                    <button @click="editList($event, list)"><i class="fa-regular fa-pen-to-square"></i></button>
                                     <button><i class="fa-solid fa-trash-can"></i></button>                                
   
                                 </div>   
@@ -54,8 +57,8 @@
                     </section>
 
                     <section class="flex-1 section-card">
-                        <h3 class="list-heading">Tasks for: {{listSelected}}
-                            List<span v-if="listSelected == 'All'">s</span></h3>
+                        <h3 class="list-heading">Tasks for: {{ listSelected.name }}
+                            List<span v-if="listSelected.id === 0">s</span></h3>
 
                             <div v-if="todos" >
                                 <div v-for="todo in todos" :key="todo.id">
@@ -76,7 +79,7 @@
 </template>
 
 <script setup>
-    
+    import { useForm } from "@inertiajs/vue3"
     import Layout from '@/Shared/Layout.vue' 
     import AddListForm from '@/Components/addListForm.vue'
     import { useTodoListStore } from '@/Stores/todoListStore'   
@@ -91,6 +94,10 @@
         message: String,
         todoLists: Object
     })   
+
+    const listAmendForm = useForm({
+        name: null, 
+    });
     
     const showAddListForm = () => {
         showAddFormBtn.value = false
@@ -100,7 +107,7 @@
     }
     
     const todos = computed(() => {
-        if (listSelected.value == 'All' ) { 
+        if (listSelected.value.id === 0 ) { 
             return todoListStore.getTodosAllLists
         } else {
             return todoListStore.getTodosForList
@@ -111,41 +118,43 @@
 
     todoListStore.setTodoLists(props.todoLists)
 
-    const { todoLists, listSelected, getTodoListNames,
-            getTodosAllLists, getTodosForList,
-            getTodoListOptions } = storeToRefs(todoListStore);  
+    const {  listSelected, getListDataOptions } = storeToRefs(todoListStore);  
             
     const changeSelectedList = (newList) => {
         todoListStore.setListSelected(newList)  
     }    
     
-    const currentEditListName = ref(null);
-    const amendedListName = ref('');
+    const currentEditListId = ref(0);
+ 
 
     // Edit button handler
-    const editListName = (event, name) => {
-        currentEditListName.value = name;
-        amendedListName.value = name;   
-        listSelected.value = name;
-        console.log(event, name); 
+    const editList = (event, list) => {
+        currentEditListId.value = list.id
+        listAmendForm.name = list.name   
+        todoListStore.setListSelected(list)
+       
         event.stopPropagation();
     };
 
-    // Save button handler
-    const saveListEdit = (name) => {
-        // Implement saving logic here
-        // For demonstration, let's just log the edited text
-        console.log(`Saving '${amendedListName.value}'`);
+    
+    const updateList = (id) => {
+        
+
+        listAmendForm.patch(route('todo-lists.update', {id: id}), {
+            onSuccess: () => {              
+                console.log('successful save')
+            },
+        });
 
         // Reset editing state
-        currentEditListName.value = null;
-        amendedListName.value = '';
+        currentEditListId.value = 0;
+        listAmendForm.name = '';
     };
 
     // Cancel button handler
     const cancelListEdit = () => {
-        currentEditListName.value = null;
-        amendedListName.value = '';
+        currentEditListId.value = 0;
+        listAmendForm.name = '';
     };
         
 </script>

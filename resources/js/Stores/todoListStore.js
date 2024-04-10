@@ -3,20 +3,34 @@ import { defineStore } from 'pinia'
 export const useTodoListStore = defineStore('taskStore', {
     state: () => ({
         todoLists: [],
-        listSelected: 'All',        
+        listSelected: { id: 0, name: 'All' }       
     }),
     getters: {
-        getTodoListNames() {                            
-            return this.todoLists.map(tdl => tdl.name)
+        // getTodoListNames() {                            
+        //     return this.todoLists.map(tdl => tdl.name)
+        // },
+
+        // getTodoListOptions() {
+        //     return [ 'All', ...this.getTodoListNames ] 
+        // },   
+
+        getListData() {     
+            let listData = this.todoLists.map((tdl) => {
+                let list = { id: tdl.id, name: tdl.name }
+                return list
+            })
+            
+            return listData
         },
 
-        getTodoListOptions() {
-            return [ 'All', ...this.getTodoListNames ] 
-        },
+        getListDataOptions() {          
+            return [ { id: 0, name: 'All'}, ...this.getListData ] 
+        },   
+
 
         getTodosForList() {            
             let currentToDoList
-             = this.todoLists.find(t => t.name === this.listSelected)        
+             = this.todoLists.find(t => t.id === this.listSelected.id)        
             return currentToDoList.todos ?  currentToDoList.todos : []
         },  
 
@@ -37,6 +51,9 @@ export const useTodoListStore = defineStore('taskStore', {
         },
         addList(todoList) {         
             this.todoLists.unshift(todoList)
-        },        
+        },   
+        updateList() {
+            
+        }     
     } 
 })

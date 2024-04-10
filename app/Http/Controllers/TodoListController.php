@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\TodoList;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 
 class TodoListController extends Controller
 {
@@ -27,5 +28,18 @@ class TodoListController extends Controller
         return response()->json([          
             'addedTodoList' => $list
         ]);
+    }
+
+    public function update(Request $request, TodoList $todoList ) {
+   
+        $validated = $request->validate([
+            'name' => 'required|min:3|max:255'           
+        ]);
+
+        $todoList->name = $validated['name'];
+
+        $todoList->save();        
+
+        return redirect()->back();
     }
 }
