@@ -38,8 +38,12 @@ class TodoListController extends Controller
 
         $todoList->name = $validated['name'];
 
-        $todoList->save();        
+        $todoList->save();          
+     
 
-        return redirect()->back();
+        return response()->json([
+            'updatedTodoList' => $todoList,
+            'message' => 'Todo List updated successfully.'
+        ]);
     }
 }

@@ -5,14 +5,8 @@ export const useTodoListStore = defineStore('taskStore', {
         todoLists: [],
         listSelected: { id: 0, name: 'All' }       
     }),
-    getters: {
-        // getTodoListNames() {                            
-        //     return this.todoLists.map(tdl => tdl.name)
-        // },
 
-        // getTodoListOptions() {
-        //     return [ 'All', ...this.getTodoListNames ] 
-        // },   
+    getters: { 
 
         getListData() {     
             let listData = this.todoLists.map((tdl) => {
@@ -52,8 +46,17 @@ export const useTodoListStore = defineStore('taskStore', {
         addList(todoList) {         
             this.todoLists.unshift(todoList)
         },   
-        updateList() {
-            
+        updateList(updatedList) {
+ 
+            let indexToReplace 
+                 = this.todoLists.findIndex((tdl) => tdl.id === updatedList.id )
+
+            if (indexToReplace !== -1) {
+                this.todoLists[indexToReplace] = {
+                    ...this.todoLists[indexToReplace],
+                    ...updatedList
+                };
+            } 
         }     
     } 
 })

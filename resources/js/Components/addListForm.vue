@@ -77,8 +77,7 @@
             //handle validation errors
             if (error.response && error.response.status === 422 && error.response.data.errors)
             {     
-                formErrors = getValidationErrors(error.response.data.errors)
-                console.log(formErrors)
+                formErrors = getValidationErrors(error.response.data.errors)          
                 
                 toast.add({severity:'error', 
                     summary: 'Error!',                              
