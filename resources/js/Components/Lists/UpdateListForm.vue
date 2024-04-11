@@ -56,7 +56,7 @@
         }
         catch (error) { 
             //handle validation errors
-            console.log('caught error')
+      
             if (error.response && error.response.status === 422 && error.response.data.errors)
             {     
                 formErrors = getValidationErrors(error.response.data.errors)              
@@ -90,7 +90,7 @@
     }
     
     // hide error toast as soon as user starts to type in field
-    const hideErrorToast = () => {
+    const hideErrorToast = () => {       
         if (isErrorToastVisible.value) {   
             toast.remove(errorToastKey);
             isErrorToastVisible.value = false;
