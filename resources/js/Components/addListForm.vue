@@ -8,8 +8,8 @@
                 <input type="text" 
                     v-model="form.name"
                     @input="hideErrorToast"
-                    class=" py-3 pl-4 pr-2 rounded-l-lg border-r-0 
-                            focus:outline-none focus:ring-0" 
+                    class="py-3 pl-4 pr-2 rounded-l-lg border-r-0 
+                            focus:outline-none focus:ring-0 w-full" 
                     placeholder="New List Name">
 
                 <button type="button" @click="closeForm"
@@ -31,6 +31,7 @@
     import axios from 'axios'
     import { useTodoListStore } from '@/Stores/todoListStore'
     import { useToast } from 'primevue/usetoast'
+    import { useHandleErrors } from '@/Composables/useHandleErrors';
     import { ref } from 'vue'
     
     const props= defineProps({
@@ -46,6 +47,8 @@
     const makeFormVisible = () => {
       isFormVisible.value = true;     
     };
+
+    const { getValidationErrors } = useHandleErrors()
 
     const toast = useToast()
     const isErrorToastVisible = ref(false)
@@ -104,23 +107,14 @@
                    detail: `The ${listName} list has been added`, 
                    life: 6000
                    });
-    }
-
-    const getValidationErrors = (errors) => {
-        let validationErrors = new Object()
-        Object.keys(errors).forEach((inputName) => {
-            validationErrors[inputName] = errors[inputName][0] 
-        })
-        return validationErrors
-    }
+    } 
 
     const hideErrorToast = () => {
         if (isErrorToastVisible.value) {   
             toast.remove(errorToastKey);
             isErrorToastVisible.value = false;
         }  
-    }
-   
+    }   
 
 </script>
 

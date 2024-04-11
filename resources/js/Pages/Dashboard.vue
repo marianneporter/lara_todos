@@ -16,7 +16,7 @@
                                      @formClosed="showAddFormBtn = true"/>                                                    
 
                         <div v-for="list in getListDataOptions" :key="list.id" >
-                            <div  :class="[ listSelected.name == list.name ? 
+                            <div  :class="[ listSelected.id == list.id ? 
                                         'list-entry-card-selected' : 'list-entry-card']" 
                                    class="flex gap-2">
 

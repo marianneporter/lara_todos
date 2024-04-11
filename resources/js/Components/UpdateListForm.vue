@@ -30,6 +30,7 @@
     const todoListStore = useTodoListStore()
 
     const form = ref({ name: props.list.name })
+    let formErrors = {}
   
     const emits = defineEmits(['endListEdit'])
 

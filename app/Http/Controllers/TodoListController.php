@@ -33,7 +33,7 @@ class TodoListController extends Controller
     public function update(Request $request, TodoList $todoList ) {
    
         $validated = $request->validate([
-            'name' => 'required|min:3|max:255'           
+            'name' => 'required|min:2|max:30'           
         ]);
 
         $todoList->name = $validated['name'];
