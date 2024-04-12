@@ -4,7 +4,11 @@ import { createInertiaApp, Link } from '@inertiajs/vue3';
 import { ZiggyVue } from "../../vendor/tightenco/ziggy/dist/index.esm";
 import { createPinia } from 'pinia'; 
 import '@fortawesome/fontawesome-free/css/all.min.css';
+
 import PrimeVue from 'primevue/config';
+import ConfirmationService from 'primevue/confirmationservice';
+//import ConfirmDialog from 'primevue/confirmdialog';
+
 
 import ToastService from 'primevue/toastservice';
 
@@ -28,6 +32,7 @@ createInertiaApp({
       .use(ZiggyVue, Ziggy)
       .use(PrimeVue)
       .use(ToastService)
+      .use(ConfirmationService)
       .component('Link', Link)
       .mount(el);
   }

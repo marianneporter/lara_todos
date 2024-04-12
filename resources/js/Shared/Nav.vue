@@ -24,8 +24,6 @@ import { usePage } from '@inertiajs/vue3';
 
 const { props } = usePage();
 const username = computed(() => props.auth.username);
-console.log(props.auth.username)
-
 
 const logout = () => {
     axios.post('/logout')

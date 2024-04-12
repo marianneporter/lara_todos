@@ -31,11 +31,13 @@
                         @click="changeSelectedList(list)">                                                                   
                         {{ list.name }}                              
                     </button> 
-
+                  
                     <button v-if="list.id !==0" @click="editList($event, list)">
                         <i class="fa-regular fa-pen-to-square"></i>
                     </button>
-                    <button v-if="list.id !==0">
+                    <button @click="confirmDelete(list)"
+                            label="Delete" severity="danger" outlined
+                            v-if="list.id !==0">
                         <i class="fa-solid fa-trash-can"></i>
                     </button>                                
 
@@ -46,15 +48,20 @@
 </template>
 
 <script setup>
-    import AddListForm from '@/Components/Lists/addListForm.vue'
+    import AddListForm from '@/Components/Lists/AddListForm.vue'
     import UpdateListForm from "@/Components/Lists/UpdateListForm.vue"
     import { useTodoListStore } from '@/Stores/todoListStore'   
     import { storeToRefs } from 'pinia'
-    import { computed, ref } from 'vue';    
+    import { ref } from 'vue';    
+    import { useConfirm } from 'primevue/useconfirm'
+    import { useToast } from 'primevue/usetoast'
 
     const props = defineProps({       
         todoLists: Object
-    })        
+    })    
+    
+    const confirm = useConfirm()
+    const toast = useToast()
   
     const addListFormRef = ref(null);  
 
@@ -89,6 +96,38 @@
     const endListEdit = () => {
         currentEditListId.value = 0;
     }   
+
+    const confirmDelete = (list) => {
+       
+        confirm.require({
+            message: `Are you sure you want to delete your ${list.name} list?`,
+            accept: () => { 
+                deleteList(list)             
+            }
+        });
+    }; 
+
+    const deleteList = async (list) => {
+        try {
+            const response
+              = await axios.delete(route('todo-lists.delete', { todoList: list.id }));
+
+            todoListStore.deleteList(list.id)
+
+            toast.add({severity:'success', 
+                   summary: 'Success!',
+                   detail: `The ${list.name} list has been deleted`, 
+                   life: 3000
+                });
+           
+        } catch (error) {
+            toast.add({severity:'error', 
+                    summary: 'Error!',                              
+                    detail: `Unable to delete ${list.name}`                                     
+            });  
+        }
+    };
+
 
     
 </script>

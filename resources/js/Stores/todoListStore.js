@@ -57,6 +57,10 @@ export const useTodoListStore = defineStore('taskStore', {
                     ...updatedList
                 };
             } 
-        }     
+        }, 
+        
+        deleteList(id) {
+            this.todoLists = this.todoLists.filter(tdl => tdl.id !== id)
+        }
     } 
 })

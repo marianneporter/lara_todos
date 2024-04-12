@@ -30,11 +30,6 @@
         } else {
             return getTodosForList.value
         }
-    })   
-    
-    let allLists = todoListStore.getTodosAllLists
-    console.log(allLists)
+    })       
 
-    let otherLists = getTodosAllLists.value
-    console.log(otherLists)
 </script>
