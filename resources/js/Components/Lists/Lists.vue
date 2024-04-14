@@ -37,7 +37,7 @@
                     </button>
                     <button @click="confirmDelete(list)"
                             label="Delete" severity="danger" outlined
-                            v-if="list.id !==0">
+                            v-if="list.id !== 0">
                         <i class="fa-solid fa-trash-can"></i>
                     </button>                                
 
@@ -85,7 +85,7 @@
     const currentEditListId = ref(0);
 
 
-    // Edit button handler
+   
     const editList = (event, list) => {
         currentEditListId.value = list.id   
         todoListStore.setListSelected(list)

@@ -29,11 +29,15 @@ export const useTodoListStore = defineStore('taskStore', {
         },  
 
         getTodosAllLists() {              
-            let allTodos = [];   
-            this.todoLists.forEach(t => {                
-                allTodos.push(...t.todos)
-            })       
-            return allTodos    
+            let allTodos = [];
+            this.todoLists.forEach(list => {
+                let todosWithListName = list.todos.map(todo => ({
+                    ...todo,  
+                    listName: list.name  
+                }));
+                allTodos.push(...todosWithListName); 
+            });
+            return allTodos;
         },              
     },
     actions: {
