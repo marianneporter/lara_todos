@@ -9,27 +9,50 @@
                     transform -translate-y-1/2"></i>
         </div>
 
-        <div class="self-end mt-2 gap-3">
-            <button type="button" @click="cancelTodoEdit($event)" class="secondary-btn p-2">Cancel</button>
-            <button type="submit" class="primary-btn ml-2 p-2">Save</button>                                       
+        <div class="flex justify-between mt-2">
+            <div class="mt-2">
+                <label class="flex items-center space-x-1 cursor-pointer">
+                    <input type="checkbox" v-model="form.completed" class="hidden">
+                    <span class="custom-checkbox h-8 w-8 rounded border-2 border-gray-300
+                            bg-white transition duration-300 ease-in-out flex justify-center items-center"
+                        :class="{'bg-sky-600': form.completed}">
+                        <i class="fa fa-check text-white" v-show="form.completed" style="font-size: 1.35rem;"></i>
+                    </span>
+                    <span>Completed</span>
+                </label>
+            </div>
+
+            <div class="self-end mt-2 gap-3">
+                <button type="button" @click="cancelTodoEdit($event)" class="secondary-btn p-2">Cancel</button>
+                <button type="submit" class="primary-btn ml-2 p-2">Save</button>                                       
+            </div>
         </div>
+
     </form>   
 </template>
 
 <script setup>
-    import { ref } from 'vue'
+    import { ref, watch } from 'vue'
     import axios from 'axios'
     import { useTodoListStore } from '@/Stores/todoListStore'
-    import { useToast } from 'primevue/usetoast'
+    import { useToast } from 'primevue/usetoast'    
+  
+
     import { useHandleErrors } from '@/Composables/useHandleErrors';
 
     const props = defineProps({
         todo: Object
-    })   
+    })  
+    
+    watch(() => props.todo, (newTodo) => {
+        form.value.task = newTodo.task;
+        form.value.completed = newTodo.completed || false;
+    }, { deep: true });
 
     const todoListStore = useTodoListStore()
 
-    const form = ref({ task: props.todo.task })
+    const form = ref({ task: props.todo.task, 
+                       completed: props.todo.completed || false })
     let formErrors = {}
   
     const emits = defineEmits(['endTodoEdit'])
@@ -39,6 +62,10 @@
     const toast = useToast()
     const isErrorToastVisible = ref(false)
     const errorToastKey = 'errorToastKey'    
+
+    const toggleCheckbox = () => {
+        form.value.completed = !form.value.completed;
+    };
   
     const updateTodo = async () => {
 
@@ -106,3 +133,17 @@
     
 
 </script>
+
+<style scoped>
+.custom-checkbox {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.custom-checkbox .fa-check {
+    visibility: hidden;
+}
+.custom-checkbox.checked .fa-check {
+    visibility: visible;
+}
+</style>

@@ -11,6 +11,7 @@
                         <div v-if="currentEditTodoId && currentEditTodoId === todo.id" class="flex-1">
                         
                             <UpdateTodoForm :todo="todo"
+                                            :key="todo.id"
                                             @endTodoEdit="endTodoEdit"  />                             
 
                         </div>
@@ -78,8 +79,7 @@
     }
 
    
-    const selectListToEdit = (listId) => {
-        console.log('trying to store new list id= ' + listId)
+    const selectListToEdit = (listId) => {       
         todoListStore.setListSelectedById(listId)
     }; 
 
