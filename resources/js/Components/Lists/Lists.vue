@@ -14,7 +14,7 @@
             <div  :class="[ listSelected.id == list.id ? 
                         'list-entry-card-selected' : 'list-entry-card']" 
                 class="flex gap-2">
-
+              
                 <!-- editing mode -->
                 <div v-if="currentEditListId && currentEditListId === list.id" class="flex-1">
                 

@@ -9,12 +9,11 @@
 
                         <!-- editing mode -->
                         <div v-if="currentEditTodoId && currentEditTodoId === todo.id" class="flex-1">
-<!--                         
-                            <UpdateListForm :list="list"
-                                            @endListEdit="endListEdit"  /> -->
+                        
+                            <UpdateTodoForm :todo="todo"
+                                            @endTodoEdit="endTodoEdit"  />                             
 
                         </div>
-
                         <!-- list mode -->
                         <div v-else class="flex w-full gap-3 items-stretch h-full">   
                             <button :class="{'completed': todo.completed}" @click="toggleCompletion(todo)">
@@ -23,28 +22,28 @@
                                     {{ todo.description }}
                             </button>                 
 
-                            <div>                                
-                                <p class="flex-grow flex-shrink-0 basis-0 text-left">                                                                   
-                                    {{ todo.task }}                              
-                                </p> 
-                                <p>from: {{ todo.listName }}</p>
+                            <div class="flex-grow flex-shrink-0 basis-0 text-left">                                
+                                <p> {{ todo.task }}</p> 
+                                <p v-if="listSelected.id === 0" class="text-xs">from: {{ todo.listName }}  list</p>
                             </div>
 
+                            <template v-if="listSelected.id !==0">
+                                <button  @click="editTodo(todo)" >
+                                    <i class="fa-regular fa-pen-to-square"></i>
+                               </button>
 
-                        
-                            <button v-if="todo.id !==0" @click="editTodo($event, list)">
-                                <i class="fa-regular fa-pen-to-square"></i>
+                                <button @click="confirmDelete(list)"
+                                        label="Delete" severity="danger" outlined >
+                                    <i class="fa-solid fa-trash-can"></i>
+                                </button>    
+                            </template>                          
+                                                        
+                            <button v-else
+                                    class="outline-btn" 
+                                    @click="selectListToEdit(todo.todo_list_id)">
+                                edit list
                             </button>
-
-                            <button @click="confirmDelete(list)" v-if="todo.id !==0"
-                                    label="Delete" severity="danger" outlined >
-                                <i class="fa-solid fa-trash-can"></i>
-                            </button>    
-                            
-                            <button v-if="todo.id === 0">
-                                edit {{ todo.listName }}
-                            </button>
-
+                           
                         </div>   
                   </div>                         
                 </div>                                   
@@ -59,6 +58,7 @@
     import { computed, ref } from 'vue'
     import { useTodoListStore } from '@/Stores/todoListStore'  
     import { storeToRefs } from 'pinia' 
+    import UpdateTodoForm from '@/Components/Todos/UpdateTodoForm.vue'
      
     const todoListStore = useTodoListStore()
     const {  listSelected, getTodosAllLists, getTodosForList } = storeToRefs(todoListStore);  
@@ -72,16 +72,23 @@
             return getTodosForList.value
         }
     })    
-    
+
     const toggleCompletion = () => {
         console.log('toggling complete!')
     }
 
    
-    const editTodo = (event, todo) => {
-        currentEditTodoId.value = todo.id       
-    
-        event.stopPropagation();
+    const selectListToEdit = (listId) => {
+        console.log('trying to store new list id= ' + listId)
+        todoListStore.setListSelectedById(listId)
     }; 
+
+    const editTodo = (todo) => {
+        currentEditTodoId.value = todo.id
+    }
+    
+    const endTodoEdit = () => {       
+        currentEditTodoId.value = 0;
+    }   
 
 </script>
