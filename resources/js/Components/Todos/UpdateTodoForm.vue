@@ -11,15 +11,17 @@
 
         <div class="flex justify-between mt-2">
             <div class="mt-2">
-                <label class="flex items-center space-x-1 cursor-pointer">
-                    <input type="checkbox" v-model="form.completed" class="hidden">
-                    <span class="custom-checkbox h-8 w-8 rounded border-2 border-gray-300
-                            bg-white transition duration-300 ease-in-out flex justify-center items-center"
-                        :class="{'bg-sky-600': form.completed}">
-                        <i class="fa fa-check text-white" v-show="form.completed" style="font-size: 1.35rem;"></i>
-                    </span>
-                    <span>Completed</span>
-                </label>
+                    <label class="flex items-center space-x-3 cursor-pointer">
+                        <input type="checkbox" v-model="form.completed"
+                               class="hidden" :class="{'checked': form.completed}" @change="toggleCheckbox">
+                        <span class="flex items-center justify-center h-8 w-8 rounded border-2 border-gray-300
+                             transition duration-300 ease-in-out"
+                                :class="{'bg-sky-600': form.completed, 'text-white': form.completed}">
+                            <i class="fa fa-check text-whitetext-center" 
+                                v-show="form.completed"></i>
+                        </span>
+                        <span>Completed</span>                   
+                    </label>
             </div>
 
             <div class="self-end mt-2 gap-3">
@@ -32,7 +34,7 @@
 </template>
 
 <script setup>
-    import { ref, watch } from 'vue'
+    import { ref } from 'vue'
     import axios from 'axios'
     import { useTodoListStore } from '@/Stores/todoListStore'
     import { useToast } from 'primevue/usetoast'    
@@ -42,17 +44,12 @@
 
     const props = defineProps({
         todo: Object
-    })  
-    
-    watch(() => props.todo, (newTodo) => {
-        form.value.task = newTodo.task;
-        form.value.completed = newTodo.completed || false;
-    }, { deep: true });
+    })   
 
     const todoListStore = useTodoListStore()
 
-    const form = ref({ task: props.todo.task, 
-                       completed: props.todo.completed || false })
+    const form = ref({ task: props.todo.task,
+                       completed: props.todo.completed })
     let formErrors = {}
   
     const emits = defineEmits(['endTodoEdit'])
@@ -62,19 +59,16 @@
     const toast = useToast()
     const isErrorToastVisible = ref(false)
     const errorToastKey = 'errorToastKey'    
-
-    const toggleCheckbox = () => {
-        form.value.completed = !form.value.completed;
-    };
   
     const updateTodo = async () => {
 
-        try {
+    try {
             console.log('updating todo!')
             const response = await axios.patch(route('todos.update', 
                                                      {id: props.todo.id}),
                             {
                             task: form.value.task,
+                            completed: form.value.completed
                             })  
            
             todoListStore.updateTodo(response.data.updatedTodo)         
@@ -82,8 +76,8 @@
             form.value.task = '' 
             emits('endTodoEdit')
         }
-        catch (error) { 
-            //handle validation errors
+       catch (error) { 
+          //  handle validation errors
             console.log('handling errors')
             if (error.response && error.response.status === 422 && error.response.data.errors)
             {     
@@ -135,15 +129,10 @@
 </script>
 
 <style scoped>
-.custom-checkbox {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-.custom-checkbox .fa-check {
-    visibility: hidden;
-}
-.custom-checkbox.checked .fa-check {
-    visibility: visible;
-}
+    /* .custom-checkbox {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    } */
+
 </style>
