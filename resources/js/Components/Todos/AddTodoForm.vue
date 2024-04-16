@@ -1,16 +1,16 @@
 <template>
     <transition name="scale">
-        <form v-if="isFormVisible" @submit.prevent="addNewList" 
+        <form v-if="isFormVisible" @submit.prevent="addTodo" 
             class=" bg-white my-2 flex justify-between items-center
                    rounded-lg overflow-hidden">
 
             <div class="relative flex-grow">
                 <input type="text" 
-                    v-model="form.name"
+                    v-model="form.task"
                     @input="hideErrorToast"
                     class="py-3 pl-4 pr-2 rounded-l-lg border-r-0 
                             focus:outline-none focus:ring-0 w-full" 
-                    placeholder="New List Name">
+                    placeholder="New Task Name">
 
                 <button type="button" @click="closeForm"
                     class="absolute right-2 top-1/2 transform -translate-y-1/2 
@@ -20,7 +20,7 @@
                 </button>
             </div>
             <button class="px-6 py-3 bg-orange-500 text-white focus:outline-none
-                         hover:bg-orange-600 transition-colors">Add New List
+                         hover:bg-orange-600 transition-colors">Add New Todo
             </button>
        </form>      
     </transition>
@@ -65,22 +65,21 @@
     defineExpose({
         makeFormVisible
     }) 
-
   
     const addTodo = async () => {
 
         try {
             console.log('adding todo!')
-            const response = await axios.patch(route('todos.update', 
-                                                     {id: props.todo.id}),
+            const response = await axios.post(route('todos.store'),
                             {
                             task: form.value.task,
+                            todo_list_id: todoListStore.listSelected.id
                             })  
            
-            todoListStore.updateTodo(response.data.updatedTodo)         
-            showSuccess(form.value.task)
+        //    todoListStore.updateTodo(response.data.updatedTodo)         
+         //   showSuccess(form.value.task)
             form.value.task = '' 
-            emits('endTodoEdit')
+            closeForm()
         }
         catch (error) { 
             //handle validation errors
@@ -109,10 +108,10 @@
         }
     }
 
-    const cancelTodoAdd = (event) => {
-        event.preventDefault()
-        console.log('cancelling todo add')
-    }
+    // const cancelTodoAdd = (event) => {
+    //     event.preventDefault()
+    //     console.log('cancelling todo add')
+    // }
      
     const showSuccess = (task) => {    
         toast.add({severity:'success', 

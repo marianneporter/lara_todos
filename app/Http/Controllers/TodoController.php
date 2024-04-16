@@ -7,6 +7,24 @@ use Illuminate\Http\Request;
 
 class TodoController extends Controller
 {
+    public function store(Request $request)
+    {
+        
+        $validated = $request->validate([
+            'task' => 'required|string|min:2|max:40',            
+        ], [
+            'task.required' => 'Please enter your new Task Name',
+            'task.min' => 'Task name must be at least 2 characters',
+            'task.max' => 'Task name must be less than 40 characters'
+        ]);
+
+        $todo = Todo::create([
+            'task' => $request->task,
+            'todo_list_id' => $request->todo_list_id            
+        ]);
+
+        return response()->json(['addedTodo' => $todo], 200);
+    }
     
     public function update(Request $request, Todo $todo ) {   
         

@@ -21,6 +21,9 @@ Route::delete('/todo-lists/{todoList}', [TodoListController::class, 'destroy'])
 // Routes for Todos Controller             
 Route::patch('/todos/{todo}', [TodoController::class, 'update'])
             ->name('todos.update');
+Route::post('/todos', [TodoController::class, 'store'])
+            ->name('todos.store');
+
 
 // Auth Routes
 Route::get('login', [LoginController::class, 'create'])->name('login');
