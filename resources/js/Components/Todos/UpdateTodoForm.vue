@@ -122,17 +122,6 @@
         emits('endTodoEdit')
         event.preventDefault()
         form.value.task = ''
-    };
-
-    
+    };    
 
 </script>
-
-<style scoped>
-    /* .custom-checkbox {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    } */
-
-</style>
