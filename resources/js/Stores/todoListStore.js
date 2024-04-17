@@ -71,6 +71,11 @@ export const useTodoListStore = defineStore('taskStore', {
             this.todoLists = this.todoLists.filter(tdl => tdl.id !== id);
         },
 
+        addTodo(todo) {                    
+            let listIndexForAdd = this.todoLists.findIndex(( tdl => tdl.id === todo.todo_list_id) )
+            this.todoLists[listIndexForAdd].todos.unshift(todo)
+        },
+
         updateTodo(updatedTodo) {
             
             let listIndexToReplace
@@ -81,12 +86,20 @@ export const useTodoListStore = defineStore('taskStore', {
             let todoIndexToReplace
                  = this.todoLists[listIndexToReplace].todos.findIndex(td => td.id === updatedTodo.id);
         
-                if (todoIndexToReplace !== -1) {
-                    this.todoLists[listIndexToReplace].todos[todoIndexToReplace] = {
-                        ...this.todoLists[listIndexToReplace].todos[todoIndexToReplace],
-                        ...updatedTodo
-                };
+            if (todoIndexToReplace !== -1) {
+                this.todoLists[listIndexToReplace].todos[todoIndexToReplace] = {
+                    ...this.todoLists[listIndexToReplace].todos[todoIndexToReplace],
+                    ...updatedTodo
+            };
             } 
-        }
+        },
+                
+        deleteTodo(id) {
+   
+            let listIndexForDelete = this.todoLists.findIndex((tdl) =>  tdl.id === this.listSelected.id)          
+
+            this.todoLists[listIndexForDelete].todos
+                = this.todoLists[listIndexForDelete].todos.filter(tdl => tdl.id !== id);
+        },
     }
 });

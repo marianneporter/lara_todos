@@ -21,7 +21,7 @@ class TodoController extends Controller
         $todo = Todo::create([
             'task' => $request->task,
             'todo_list_id' => $request->todo_list_id            
-        ]);
+        ]); 
 
         return response()->json(['addedTodo' => $todo], 200);
     }
@@ -44,5 +44,14 @@ class TodoController extends Controller
             'updatedTodo' => $todo,
             'message' => 'Todo updated successfully.'
         ]);
+    }
+
+    
+    public function destroy(Request $request, Todo $todo) {
+        
+        $todo->delete();
+
+        return response()->json(['message' => 'Todo deleted Successfully' ]);
+      
     }
 }

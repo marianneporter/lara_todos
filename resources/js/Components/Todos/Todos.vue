@@ -42,7 +42,7 @@
                                 <i class="fa-regular fa-pen-to-square"></i>
                             </button>
 
-                            <button @click="confirmDelete(list)"
+                            <button @click="confirmDelete(todo)"
                                     label="Delete" severity="danger" outlined >
                                 <i class="fa-solid fa-trash-can"></i>
                             </button>    
@@ -70,9 +70,14 @@
     import { storeToRefs } from 'pinia' 
     import AddTodoForm from '@/Components/Todos/AddTodoForm.vue'
     import UpdateTodoForm from '@/Components/Todos/UpdateTodoForm.vue'
+    import { useConfirm } from 'primevue/useconfirm'
+    import { useToast } from 'primevue/usetoast'
      
     const todoListStore = useTodoListStore()
     const {  listSelected, getTodosAllLists, getTodosForList } = storeToRefs(todoListStore);  
+        
+    const confirm = useConfirm()
+    const toast = useToast()
 
     const showAddFormBtn = ref(true)
     const addTodoFormRef = ref(null)
@@ -109,6 +114,39 @@
     
     const endTodoEdit = () => {       
         currentEditTodoId.value = 0;
-    }   
+    }  
+
+    const confirmDelete = (todo) => {
+       
+       confirm.require({
+           message: `Are you sure you want to delete your ${todo.task} task?`,
+           accept: () => { 
+               deleteTodo(todo)             
+           }
+       });
+    }; 
+
+    const deleteTodo = async (todo) => {
+
+        try {
+            const response
+             = await axios.delete(route('todos.delete', { todo: todo.id }));
+
+            todoListStore.deleteTodo(todo.id)
+
+            toast.add({severity:'success', 
+                  summary: 'Success!',
+                  detail: `The ${todo.task} todo has been deleted`, 
+                  life: 3000
+               });
+          
+        } catch (error) {
+            toast.add({severity:'error', 
+                   summary: 'Error!',                              
+                   detail: `Unable to delete ${todo.task}`                                     
+            });  
+        }
+    };
+
 
 </script>

@@ -69,15 +69,15 @@
     const addTodo = async () => {
 
         try {
-            console.log('adding todo!')
+          
             const response = await axios.post(route('todos.store'),
                             {
                             task: form.value.task,
                             todo_list_id: todoListStore.listSelected.id
                             })  
            
-        //    todoListStore.updateTodo(response.data.updatedTodo)         
-         //   showSuccess(form.value.task)
+            todoListStore.addTodo(response.data.addedTodo)         
+            showSuccess(form.value.task)
             form.value.task = '' 
             closeForm()
         }
@@ -100,7 +100,7 @@
                 //handle any other errors from axios call     
                 toast.add({severity:'error', 
                     summary: 'Something went Wrong',
-                    detail: `Unable to update ${form.value.task} task`                 
+                    detail: `Unable to add ${form.value.task} task`                 
                 });
                 form.value.task = ''; 
                 closeForm()              
@@ -116,7 +116,7 @@
     const showSuccess = (task) => {    
         toast.add({severity:'success', 
                    summary: 'Success!',
-                   detail: `The ${task} task has been updated`, 
+                   detail: `The ${task} task has been added`, 
                    life: 6000
         });
     }
