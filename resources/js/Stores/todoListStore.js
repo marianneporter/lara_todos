@@ -101,5 +101,16 @@ export const useTodoListStore = defineStore('taskStore', {
             this.todoLists[listIndexForDelete].todos
                 = this.todoLists[listIndexForDelete].todos.filter(tdl => tdl.id !== id);
         },
+
+        toggleTodoCompletion(todoId) {
+            const list = this.todoLists.find(list => list.todos.some(todo => todo.id === todoId));
+            if (!list) return;
+            
+            const todo = list.todos.find(todo => todo.id === todoId);
+            if (todo) {
+                todo.completed = !todo.completed;
+            }
+            return todo.completed
+        },
     }
 });

@@ -99,10 +99,29 @@
         }
     })    
 
-    const toggleCompletion = () => {
-        console.log('toggling complete!')
-    }
+    const toggleCompletion = async (todo) => {
+          
+        const newStatus = todoListStore.toggleTodoCompletion(todo.id);
 
+        try {           
+            const response = await axios.patch(route('todos.toggleCompletion', { todo: todo.id }), {
+                completed: newStatus
+            });
+            
+            if (response.status !== 200) {
+                throw new Error('Failed to update todo status');
+            }
+
+        } catch (error) {
+            
+            todoListStore.toggleTodoCompletion(todo.id);
+            toast.add({
+                severity:'error', 
+                summary: 'Error!',                              
+                detail: `Failed to toggle completion status for ${todo.task}`
+            });
+        }
+    }
    
     const selectListToEdit = (listId) => {       
         todoListStore.setListSelectedById(listId)

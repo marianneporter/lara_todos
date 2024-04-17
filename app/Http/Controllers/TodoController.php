@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Todo;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+
 
 class TodoController extends Controller
 {
@@ -45,13 +47,22 @@ class TodoController extends Controller
             'message' => 'Todo updated successfully.'
         ]);
     }
-
     
-    public function destroy(Request $request, Todo $todo) {
-        
+    public function destroy(Request $request, Todo $todo) {        
         $todo->delete();
+        return response()->json(['message' => 'Todo deleted Successfully' ]);      
+    }
 
-        return response()->json(['message' => 'Todo deleted Successfully' ]);
-      
+    public function toggleCompletion(Request $request, Todo $todo) {
+                
+        Log::info('in toggle completion method');
+        Log::info("$request->input('completed')"   . $request->input('completed'));
+        $todo->completed = $request->input('completed');
+        $todo->save();
+    
+        return response()->json([
+            'updatedTodo' => $todo,
+            'message' => 'Todo completion status updated successfully.'
+        ]);
     }
 }

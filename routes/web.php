@@ -24,12 +24,11 @@ Route::patch('/todos/{todo}', [TodoController::class, 'update'])
 Route::post('/todos', [TodoController::class, 'store'])
             ->name('todos.store');
 Route::delete('/todos/{todo}', [TodoController::class, 'destroy'])
-            ->name('todos.delete');  
-
+            ->name('todos.delete'); 
+Route::patch('/todos/{todo}/toggle-completion', [TodoController::class, 'toggleCompletion'])
+            ->name('todos.toggleCompletion');
 
 // Auth Routes
 Route::get('login', [LoginController::class, 'create'])->name('login');
 Route::post('login', [LoginController::class, 'authenticate'])->name('authenticate');
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
-
-
