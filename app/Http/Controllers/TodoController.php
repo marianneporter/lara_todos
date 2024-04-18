@@ -4,8 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Todo;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
-
 
 class TodoController extends Controller
 {
@@ -53,10 +51,8 @@ class TodoController extends Controller
         return response()->json(['message' => 'Todo deleted Successfully' ]);      
     }
 
-    public function toggleCompletion(Request $request, Todo $todo) {
-                
-        Log::info('in toggle completion method');
-        Log::info("$request->input('completed')"   . $request->input('completed'));
+    public function toggleCompletion(Request $request, Todo $todo) {                
+      
         $todo->completed = $request->input('completed');
         $todo->save();
     
