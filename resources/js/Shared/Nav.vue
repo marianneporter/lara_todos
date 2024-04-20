@@ -4,8 +4,8 @@
             <li>Lara Todos</li>
         </ul>
         <div v-if="!username" class="flex gap-4">
-            <Link href="#">Register</Link>
-            <Link href="#">Login</Link>
+            <Link :href="route('register.show')">Register</Link>
+            <Link :href="route('login')">Login</Link>
         </div>   
         <div v-if="username" class="flex gap-4">
             <div>Welcome {{ username }}</div>

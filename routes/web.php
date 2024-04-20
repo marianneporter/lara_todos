@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TodoController;
+use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\TodoListController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Auth\LoginController;
@@ -29,6 +30,13 @@ Route::patch('/todos/{todo}/toggle-completion', [TodoController::class, 'toggleC
             ->name('todos.toggleCompletion');
 
 // Auth Routes
-Route::get('login', [LoginController::class, 'create'])->name('login');
-Route::post('login', [LoginController::class, 'authenticate'])->name('authenticate');
-Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+Route::get('login', [LoginController::class, 'create'])
+                                   ->name('login');
+Route::post('login', [LoginController::class, 'authenticate'])
+                                   ->name('authenticate');
+Route::post('/logout', [LoginController::class, 'logout'])
+                                   ->name('logout');
+Route::get('register', [RegisterController::class, 'showRegistrationForm'])
+                                   ->name('register.show');
+Route::post('/register', [RegisterController::class, 'register'])
+                                   ->name('register.submit');

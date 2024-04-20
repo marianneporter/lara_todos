@@ -1,8 +1,6 @@
 <template>
       <Layout>
-            <div class="max-w-6xl mx-auto mt-3">
-                <h1>Welcome to the Laravel Todo List App</h1>
-             
+            <div class="max-w-6xl mx-auto mt-6">
                 <div class="flex w-full text-black gap-4 min-h-full">                    
                     <Lists :todoLists="todoLists" />
                     <Todos />

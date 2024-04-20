@@ -43,7 +43,7 @@
                             </button>
 
                             <button @click="confirmDelete(todo)"
-                                    label="Delete" severity="danger" outlined >
+                                    label="Delete">
                                 <i class="fa-solid fa-trash-can"></i>
                             </button>    
                         </template>                          

@@ -12,7 +12,6 @@
     <Toast position="top-center" />  
     <ConfirmDialog></ConfirmDialog>
 
-
    </div> 
 </template>
 

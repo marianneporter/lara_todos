@@ -36,7 +36,7 @@
                  
             </form>  
             <div><span class="text-blue-950">No account? </span>
-                 <Link class="text-blue-500 underline" href="/login">
+                <Link class="text-blue-500 underline" :href="route('register.show')">
                     Register to keep track of your todos!
                 </Link>
 

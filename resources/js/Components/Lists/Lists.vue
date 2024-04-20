@@ -35,8 +35,7 @@
                     <button v-if="list.id !==0" @click="editList($event, list)">
                         <i class="fa-regular fa-pen-to-square"></i>
                     </button>
-                    <button @click="confirmDelete(list)"
-                            label="Delete" severity="danger" outlined
+                    <button @click="confirmDelete(list)"                          
                             v-if="list.id !== 0">
                         <i class="fa-solid fa-trash-can"></i>
                     </button>                                
