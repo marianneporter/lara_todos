@@ -55,7 +55,8 @@
     const errorToastKey = 'errorToastKey'    
     
     const closeForm = () => {
-      isFormVisible.value = false; 
+      isFormVisible.value = false 
+      form.value.name=''
       emits('formClosed')
     };
 
@@ -72,8 +73,7 @@
                name: form.value.name,
             })          
             todoListStore.addList(response.data.addedTodoList)         
-            showSuccess(form.value.name)
-            form.value.name = '' 
+            showSuccess(form.value.name)  
             closeForm()
         }
         catch (error) { 

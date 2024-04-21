@@ -40,8 +40,8 @@
     const emits = defineEmits(['formClosed'])
     
     const closeForm = () => {
-      isFormVisible.value = false; 
-      console.log('in close form')
+      isFormVisible.value = false 
+      form.value.task = ''
       emits('formClosed')
     };  
 
@@ -77,8 +77,7 @@
                             })  
            
             todoListStore.addTodo(response.data.addedTodo)         
-            showSuccess(form.value.task)
-            form.value.task = '' 
+            showSuccess(form.value.task)         
             closeForm()
         }
         catch (error) { 
@@ -107,11 +106,6 @@
             }              
         }
     }
-
-    // const cancelTodoAdd = (event) => {
-    //     event.preventDefault()
-    //     console.log('cancelling todo add')
-    // }
      
     const showSuccess = (task) => {    
         toast.add({severity:'success', 
