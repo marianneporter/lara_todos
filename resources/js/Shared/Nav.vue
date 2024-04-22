@@ -70,9 +70,11 @@ const logout = () => {
         .auth-options {
             position: absolute;
             right: 0;
+            left: 0;
             transition: top 0.5s ease, opacity 0.1s ease 0.5s, visibility 0.1s 0.6s; 
             z-index: 50; 
-            display: block; 
+            display: block;  
+            text-align: center;      
         }
 
         .auth-options-visible {
