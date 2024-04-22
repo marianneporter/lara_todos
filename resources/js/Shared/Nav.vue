@@ -2,8 +2,14 @@
     <nav class="nav bg-blue-950 text-white ">  <!-- relative container for nav -->   
           
             <div class="title-nav w-full bg-blue-950 flex justify-between px-6 py-4">
-                <h3>Lara Todos</h3>
-                <button @click="menuOpen = !menuOpen">H</button>   
+                <h3 class="text-xl">Lara Todos</h3>
+                <button @click="menuOpen = !menuOpen"
+                        :class="{ 'open': menuOpen }" class="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+
             </div>
               
             <div class="auth-options bg-blue-950 p-6"
@@ -86,5 +92,48 @@ const logout = () => {
     opacity: 0;
     visibility: hidden;
 }
+
+/* Style for the hamburger button */
+.hamburger {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    width: 30px;
+    height: 25px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    box-sizing: border-box;
+    outline: none;
+}
+
+.hamburger span {
+    display: block;
+    width: 100%;
+    height: 2px;
+    background-color: white;
+    border-radius: 10px;
+    transition: all 0.3s linear;
+    position: relative;
+    transform-origin: 3px;
+}
+
+/* Animation for the hamburger lines into X */
+.hamburger.open span:first-child {
+    transform: rotate(45deg);
+    background-color: #fff; /* Keep the color consistent */
+}
+
+.hamburger.open span:nth-child(2) {
+    opacity: 0;
+    transform: translateX(20px); /* Push it out of visibility */
+}
+
+.hamburger.open span:last-child {
+    transform: rotate(-45deg);
+    background-color: #fff; /* Keep the color consistent */
+}
+
 
 </style>
