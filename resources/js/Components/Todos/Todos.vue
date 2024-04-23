@@ -1,12 +1,15 @@
 <template>
     <section class="flex-1 section-card">
-        <header class="flex justify-between">
-            <h3 class="list-heading">Tasks for: {{ listSelected.name }}
-                List<span v-if="listSelected.id === 0">s</span>
-            </h3>
-            <button v-if="listSelected.id !== 0 && showAddFormBtn" @click="showAddTodoForm" class="cursor-pointer">
-                <i class="fa-solid fa-plus"></i> Add new todo
-            </button>
+        <header >
+            <div class="flex justify-between" >
+                <h3 class="list-heading">Tasks for: {{ listSelected.name }}
+                    List<span v-if="listSelected.id === 0">s</span>
+                </h3>
+                <button v-if="listSelected.id !== 0 && showAddFormBtn" @click="showAddTodoForm" class="cursor-pointer">
+                    <i class="fa-solid fa-plus"></i> Add new todo
+                </button>
+            </div>
+            <button>< Back to lists</button>
         </header>
 
         <AddTodoForm ref="addTodoFormRef"

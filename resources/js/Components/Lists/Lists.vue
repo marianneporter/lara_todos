@@ -5,13 +5,14 @@
             <button v-if="showAddFormBtn" @click="showAddListForm" class="cursor-pointer">
                 <i class="fa-solid fa-plus"></i> Add new list
             </button>
+            
         </header>                       
         
         <AddListForm ref="addListFormRef"
                     @formClosed="showAddFormBtn = true"/>                                                    
 
         <div v-for="list in getListDataOptions" :key="list.id" >
-            <div  :class="[ listSelected.id == list.id ? 
+            <div :class="[ listSelected.id == list.id ? 
                         'list-entry-card-selected' : 'list-entry-card']" 
                 class="flex gap-2">
               
@@ -57,8 +58,10 @@
 
     const props = defineProps({       
         todoLists: Object
-    })    
+    })  
     
+    const emits = defineEmits(['new-list-selected'])
+     
     const confirm = useConfirm()
     const toast = useToast()
   
@@ -79,11 +82,10 @@
             
     const changeSelectedList = (newList) => {
         todoListStore.setListSelected(newList)  
+        emits('new-list-selected')
     }    
 
     const currentEditListId = ref(0);
-
-
    
     const editList = (event, list) => {
         currentEditListId.value = list.id   
@@ -126,7 +128,5 @@
             });  
         }
     };
-
-
     
 </script>

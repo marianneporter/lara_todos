@@ -81,8 +81,7 @@
             closeForm()
         }
         catch (error) { 
-            //handle validation errors
-            console.log('handling errors')
+            //handle validation errors          
             if (error.response && error.response.status === 422 && error.response.data.errors)
             {     
                 formErrors = getValidationErrors(error.response.data.errors)              
