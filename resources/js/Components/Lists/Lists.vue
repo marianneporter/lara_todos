@@ -39,8 +39,7 @@
                     <button @click="confirmDelete(list)"                          
                             v-if="list.id !== 0">
                         <i class="fa-solid fa-trash-can"></i>
-                    </button>                                
-
+                    </button>
                 </div>   
             </div> 
         </div>   
