@@ -1,5 +1,5 @@
 <template>
-    <section class="flex-1 section-card">
+    <section class="flex-1 section-card">    
         <header >
             <div class="flex justify-between" >
                 <h3 class="list-heading">Tasks for: {{ listSelected.name }}
@@ -9,7 +9,8 @@
                     <i class="fa-solid fa-plus"></i> Add new todo
                 </button>
             </div>
-            <button>< Back to lists</button>
+            <button v-if="screenWidth <= 768"
+                    @click="emits('back-to-list-mode')">< Back to lists</button>
         </header>
 
         <AddTodoForm ref="addTodoFormRef"
@@ -75,6 +76,15 @@
     import UpdateTodoForm from '@/Components/Todos/UpdateTodoForm.vue'
     import { useConfirm } from 'primevue/useconfirm'
     import { useToast } from 'primevue/usetoast'
+    
+    const props = defineProps({
+        screenWidth: {
+            type: Number,
+            default: () => window.innerWidth 
+        }      
+    });  
+
+    const emits = defineEmits(['back-to-list-mode'])
      
     const todoListStore = useTodoListStore()
     const {  listSelected, getTodosAllLists, getTodosForList } = storeToRefs(todoListStore);  
@@ -137,6 +147,10 @@
     const endTodoEdit = () => {       
         currentEditTodoId.value = 0;
     }  
+
+    // const backToListMode = () => {
+
+    // }
 
     const confirmDelete = (todo) => {
        

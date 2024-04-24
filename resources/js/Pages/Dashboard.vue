@@ -11,7 +11,8 @@
                 <!-- Todos Panel -->
                 <div :class="['panel', 'todos-panel', todosVisible ? 'show-todos' : '']"
                     v-show="todosVisible || screenWidth > 768">
-                    <Todos @back="handleBack" />
+                    <Todos @back-to-list-mode="handleBack"
+                           :screenWidth="screenWidth" />
                 </div>
             </div>
         </div> 
@@ -20,7 +21,8 @@
 
 <script setup>
     import { ref, onMounted, onUnmounted } from 'vue'
-    import { useTodoListStore } from '@/Stores/todoListStore'   
+    import { useTodoListStore } from '@/Stores/todoListStore' 
+    import { useHandleScreenWidth } from '@/Composables/useHandleScreenWidth'
     import Layout from '@/Shared/Layout.vue'
     import Lists from '@/Components/Lists/Lists.vue'
     import Todos from '@/Components/Todos/Todos.vue'
@@ -33,37 +35,25 @@
     const todoListStore = useTodoListStore()
     todoListStore.setTodoLists(props.todoLists)
 
-    const screenWidth = ref(window.innerWidth);
+    const { screenWidth } = useHandleScreenWidth()
+   
     const todosVisible = ref(false);
 
-    function handleResize() {
-        screenWidth.value = window.innerWidth;
-    }
-
-    onMounted(() => {
-        window.addEventListener('resize', handleResize);
-    });
-
-    onUnmounted(() => {
-        window.removeEventListener('resize', handleResize);
-    });
-
     const handleSelect = () => {
-        console.log('handle select event fired')
-        console.log('handle select event fired, todosVisible before:', todosVisible.value);
+       
         if (screenWidth.value <= 768) {
-            todosVisible.value = true;
-        }
-        console.log('todosVisible after:', todosVisible.value);
+           
+            todosVisible.value = true           
+        }     
     }
 
     const handleBack = () => {
-        console.log('handle back event fired, todosVisible before:', todosVisible.value);
+      
         if (screenWidth.value <= 768) {
-            todosVisible.value = false;
-        }
-        console.log('todosVisible after:', todosVisible.value);
-}
+           
+                todosVisible.value = false           
+        }      
+    }
    
 </script>
 
@@ -88,14 +78,19 @@
     .dashboard-container {
         position: relative;
         width: 100%;
-        overflow: hidden;
+        min-height: 100vh; 
+        /* overflow: hidden; */
     }
 
     .panel {
         width: 100%;
-        /* position: absolute; */
-        transition: transform 0.3s ease-in-out;
-        background-color: pink;
+        position: absolute;
+        top: 0;
+        left: 0;      
+        height: 100%; /* Make sure panels occupy full container height */
+        transition: transform 1s ease-in-out;
+        overflow: hidden;
+        will-change: transform;
     }
 
     .lists-panel {
@@ -111,7 +106,7 @@
     }
 
     .todos-panel.show-todos {
-        transform: translateX(0%); /* Slide in when visible */
+        transform: translateX(0%); 
     }
 }
 </style>
