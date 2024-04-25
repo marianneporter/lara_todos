@@ -68,6 +68,9 @@ export const useTodoListStore = defineStore('taskStore', {
         }, 
         
         deleteList(id) {
+            if (id === this.listSelected.id) {
+                this.listSelected = { id: 0, name: 'All' }; 
+            }
             this.todoLists = this.todoLists.filter(tdl => tdl.id !== id);
         },
 

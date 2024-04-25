@@ -10,6 +10,7 @@
                 </div>
                 <div v-if="todoLists.length > 0" class="panel">
                     <Todos @back-to-list-mode="showLists" :screenWidth="screenWidth"
+                           :key="listSelected.id"
                             v-show="screenWidth > 767 || todosVisible" />
                 </div>
             </div>                  
@@ -19,6 +20,7 @@
   
 <script setup>
 import { ref } from 'vue'
+import { storeToRefs } from 'pinia'
 import { useTodoListStore } from '@/Stores/todoListStore'
 import { useHandleScreenWidth } from '@/Composables/useHandleScreenWidth'
 import Layout from '@/Shared/Layout.vue'
@@ -32,6 +34,7 @@ const props = defineProps({
 
 const todoListStore = useTodoListStore()
 todoListStore.setTodoLists(props.todoLists)
+const { listSelected } = storeToRefs(todoListStore);  
 
 const { screenWidth } = useHandleScreenWidth()
 

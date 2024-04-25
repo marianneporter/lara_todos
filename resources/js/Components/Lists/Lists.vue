@@ -116,7 +116,7 @@
             const response
               = await axios.delete(route('todo-lists.delete', { todoList: list.id }));
 
-            todoListStore.deleteList(list.id)
+            todoListStore.deleteList(list.id) 
 
             toast.add({severity:'success', 
                    summary: 'Success!',

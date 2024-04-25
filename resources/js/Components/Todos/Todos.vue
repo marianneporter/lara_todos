@@ -11,13 +11,13 @@
                 </button>
             </div>
             <button v-if="screenWidth <= 768"
-                    @click="emits('back-to-list-mode')">< Back to lists</button>
+                    @click="emits('back-to-list-mode')"><i class="fa-solid fa-arrow-left"></i> Back to lists</button>
         </header>
 
         <AddTodoForm ref="addTodoFormRef"
                      @formClosed="showAddFormBtn = true"  />
-
-        <div v-if="todos">
+       
+        <div v-if="todos && todos.length > 0">
             <div v-for="todo in todos" :key="todo.id">
                 <div class="list-entry-card flex gap-2">
 
@@ -61,11 +61,14 @@
                     </div>   
                 </div>                         
             </div>                                   
-        </div> 
-        <div v-else>
-            <p>no todos yet</p>
-        </div>                            
+        </div>              
     </section>
+    <div v-else class="section-card">
+        <p class="list-heading" @click="emits('back-to-list-mode')">
+            <i class="fa-solid fa-arrow-left"></i>
+                  Select a list to add some todos
+        </p>
+    </div>
 </template>
 
 <script setup>
