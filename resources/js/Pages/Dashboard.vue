@@ -4,13 +4,15 @@
                     text-black min-h-full">         
             <div class="panels-container"
                     :class="{'list-active': listsActive, 'todos-active': todosActive }">
-                <div class="panel">
-                    <Lists :todoLists="todoLists" @new-list-selected="showTodos" />
+                <div class="panel max-w-screen-md">
+                    <Lists :todoLists="todoLists" @new-list-selected="showTodos"
+                            v-show="screenWidth > 767 || listsVisible"   />
                 </div>
-                <div class="panel">
-                    <Todos @back-to-list-mode="showLists" :screenWidth="screenWidth" />
+                <div v-if="todoLists.length > 0" class="panel">
+                    <Todos @back-to-list-mode="showLists" :screenWidth="screenWidth"
+                            v-show="screenWidth > 767 || todosVisible" />
                 </div>
-            </div>            
+            </div>                  
         </div>        
     </Layout>
 </template>
@@ -33,33 +35,47 @@ todoListStore.setTodoLists(props.todoLists)
 
 const { screenWidth } = useHandleScreenWidth()
 
-const todosActive = ref(false); // Start with only the Lists visible
+const todosActive = ref(false);
 const listsActive = ref(true);
-
+const todosVisible = ref(false);
+const listsVisible = ref(true);
 
 const showTodos = () => {
-    if (screenWidth.value <= 768) {      
-        todosActive.value = true;
-        listsActive.value = false;     
+    if (screenWidth.value <= 768) {   
+        todosVisible.value = true  
+        todosActive.value = true
+        listsActive.value = false  
+        setTimeout(()=> {
+            listsVisible.value = false
+        }, 600)  
     }
 }
 
 const showLists = () => {
-    if (screenWidth.value <= 768) {         
+    if (screenWidth.value <= 768) {    
+        listsVisible.value = true  
+        listsActive.value = true             
         todosActive.value = false;
-        listsActive.value = true;      
+        setTimeout(()=> {
+            todosVisible.value = false            
+        }, 600)  
     }
 }
+
 </script>
 
 
 <style scoped>
+
+
+
 /* Larger screens: side-by-side layout */
 @media (min-width: 768px) {
   .panels-container {
     display: flex;
     gap: 1rem;
     width: 100%;
+    justify-content: center;
   }
   .panel {
     flex: 1;
@@ -93,5 +109,6 @@ const showLists = () => {
     .todos-active {
         transform: translateX(-50%); 
     } 
+
 }
 </style>

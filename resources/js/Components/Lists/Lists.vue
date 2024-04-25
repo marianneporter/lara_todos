@@ -1,7 +1,11 @@
 <template>
     <section class="flex-1 section-card ">   
         <header class="flex justify-between">
-            <h3 class="list-heading">My Lists</h3>
+          
+            <h3 class="list-heading">            
+                <span v-if="getListDataOptions.length <= 1">You have no lists yet</span>
+                <span v-else>My Lists </span>              
+            </h3>
             <button v-if="showAddFormBtn" @click="showAddListForm" class="cursor-pointer">
                 <i class="fa-solid fa-plus"></i> Add new list
             </button>
@@ -11,10 +15,12 @@
         <AddListForm ref="addListFormRef"
                     @formClosed="showAddFormBtn = true"/>                                                    
 
-        <div v-for="list in getListDataOptions" :key="list.id" >
+        <div v-if="getListDataOptions.length > 1" 
+             v-for="list in getListDataOptions" :key="list.id">
+                        
             <div :class="[ listSelected.id == list.id ? 
                         'list-entry-card-selected' : 'list-entry-card']" 
-                class="flex gap-2">
+                 @click="changeSelectedList(list)">  
               
                 <!-- editing mode -->
                 <div v-if="currentEditListId && currentEditListId === list.id" class="flex-1">
@@ -27,16 +33,14 @@
                 <!-- list mode -->
                 <div v-else class="flex w-full gap-3 items-stretch h-full">                                 
 
-                    <button class="flex-grow flex-shrink-0 basis-0 text-left"
-                        :disabled="listSelected.id == list.id"
-                        @click="changeSelectedList(list)">                                                                   
-                        {{ list.name }}                              
-                    </button> 
+                    <div class="flex-grow flex-shrink-0 basis-0 text-left">
+                        {{ list.name }}
+                    </div>
                   
-                    <button v-if="list.id !==0" @click="editList($event, list)">
+                    <button v-if="list.id !==0" @click.stop="editList($event, list)">
                         <i class="fa-regular fa-pen-to-square"></i>
                     </button>
-                    <button @click="confirmDelete(list)"                          
+                    <button @click.stop="confirmDelete(list)"                          
                             v-if="list.id !== 0">
                         <i class="fa-solid fa-trash-can"></i>
                     </button>

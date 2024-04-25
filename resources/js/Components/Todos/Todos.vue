@@ -1,12 +1,13 @@
 <template>
-    <section class="flex-1 section-card">    
+    <section v-if="listSelected.id !== 0 || todos.length !== 0" 
+             class="flex-1 section-card"  >    
         <header >
-            <div class="flex justify-between" >
-                <h3 class="list-heading">Tasks for: {{ listSelected.name }}
-                    List<span v-if="listSelected.id === 0">s</span>
-                </h3>
-                <button v-if="listSelected.id !== 0 && showAddFormBtn" @click="showAddTodoForm" class="cursor-pointer">
-                    <i class="fa-solid fa-plus"></i> Add new todo
+            <div  class="flex justify-between" >
+                <h3 class="list-heading"> {{ getTodosHeading }} </h3>
+                <button v-if="listSelected.id !== 0 && showAddFormBtn"
+                    @click="showAddTodoForm" class="cursor-pointer">
+                    <i class="fa-solid fa-plus"></i>
+                     {{ `Add ${todos.length === 0 ? 'first' : 'new'} todo`}}
                 </button>
             </div>
             <button v-if="screenWidth <= 768"
@@ -16,7 +17,7 @@
         <AddTodoForm ref="addTodoFormRef"
                      @formClosed="showAddFormBtn = true"  />
 
-        <div v-if="todos" >
+        <div v-if="todos">
             <div v-for="todo in todos" :key="todo.id">
                 <div class="list-entry-card flex gap-2">
 
@@ -56,8 +57,7 @@
                                 class="outline-btn" 
                                 @click="selectListToEdit(todo.todo_list_id)">
                             edit list
-                        </button>
-                        
+                        </button>                        
                     </div>   
                 </div>                         
             </div>                                   
@@ -140,6 +140,24 @@
         todoListStore.setListSelectedById(listId)
     }; 
 
+    const getTodosHeading = computed (() => {
+     
+        if ( listSelected.value.id === 0 ) {
+            if ( todos.value.length === 0) {
+                return 'No lists or tasks yet'
+            } else {
+                return 'Tasks for: All Lists'
+            }           
+        }
+
+        if (todos.value.length === 0) {
+            return `${listSelected.value.name} list has no Todos yet`
+        } else {
+            return `Tasks for: ${listSelected.value.name}`
+        }
+
+    })
+
     const editTodo = (todo) => {
         currentEditTodoId.value = todo.id
     }
@@ -147,10 +165,6 @@
     const endTodoEdit = () => {       
         currentEditTodoId.value = 0;
     }  
-
-    // const backToListMode = () => {
-
-    // }
 
     const confirmDelete = (todo) => {
        
