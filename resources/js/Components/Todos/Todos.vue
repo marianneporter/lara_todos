@@ -116,7 +116,7 @@
     })    
 
     const toggleCompletion = async (todo) => {
-          
+        // optimistically toggle completion in store  
         const newStatus = todoListStore.toggleTodoCompletion(todo.id);
 
         try {           
@@ -129,7 +129,7 @@
             }
 
         } catch (error) {
-            
+            // change to previous completion state as update failed
             todoListStore.toggleTodoCompletion(todo.id);
             toast.add({
                 severity:'error', 

@@ -61,23 +61,37 @@
     const errorToastKey = 'errorToastKey'    
   
     const updateTodo = async () => {
-
-    try {  
-            const response = await axios.patch(route('todos.update', 
-                                                     {id: props.todo.id}),
+        try {  
+            let response
+            response = await axios.patch(route('todos.update', 
+                                                        {id: props.todo.id}),
                             {
                             task: form.value.task,
                             completed: form.value.completed
                             })  
-           
+            
             todoListStore.updateTodo(response.data.updatedTodo)         
             showSuccess(form.value.task)
             form.value.task = '' 
             emits('endTodoEdit')
         }
-       catch (error) { 
-          //  handle validation errors       
-            if (error.response && error.response.status === 422 && error.response.data.errors)
+        catch (error) { 
+            //  handle validation errors            
+            handleErrors(error)
+            return
+        }
+    }
+     
+    const showSuccess = (task) => {    
+        toast.add({severity:'success', 
+                   summary: 'Success!',
+                   detail: `The ${task} task has been updated`, 
+                   life: 4000
+        });
+    }
+
+    const handleErrors = (error) => {
+        if (error.response && error.response.status === 422 && error.response.data.errors)
             {     
                 formErrors = getValidationErrors(error.response.data.errors)              
                 
@@ -97,15 +111,6 @@
                 });
                 form.value.task = '';                
             }              
-        }
-    }
-     
-    const showSuccess = (task) => {    
-        toast.add({severity:'success', 
-                   summary: 'Success!',
-                   detail: `The ${task} task has been updated`, 
-                   life: 4000
-        });
     }
     
     // hide error toast as soon as user starts to type in field

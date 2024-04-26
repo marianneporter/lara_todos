@@ -68,17 +68,33 @@
     const todoListStore = useTodoListStore()
   
     const addNewList = async () => {
+        let response
         try {
-            const response = await axios.post('/todo-lists', {
+            response = await axios.post('/todo-lists', {
                name: form.value.name,
-            })          
-            todoListStore.addList(response.data.addedTodoList)         
-            showSuccess(form.value.name)  
-            closeForm()
+            }) 
         }
         catch (error) { 
-            //handle validation errors
-            if (error.response && error.response.status === 422 && error.response.data.errors)
+            handleErrors(error)
+            return
+        }
+
+        todoListStore.addList(response.data.addedTodoList)         
+        showSuccess(form.value.name)  
+        closeForm()
+    }
+ 
+    const showSuccess = (listName) => {    
+        toast.add({severity:'success', 
+                   summary: 'Success!',
+                   detail: `The ${listName} list has been added`, 
+                   life: 4000
+                   });
+    } 
+
+    const handleErrors = (error) => {
+           //handle validation errors
+           if (error.response && error.response.status === 422 && error.response.data.errors)
             {     
                 formErrors = getValidationErrors(error.response.data.errors)          
                 
@@ -97,16 +113,7 @@
                 form.value.name = ''; 
                 closeForm();
             }               
-        }
     }
- 
-    const showSuccess = (listName) => {    
-        toast.add({severity:'success', 
-                   summary: 'Success!',
-                   detail: `The ${listName} list has been added`, 
-                   life: 4000
-                   });
-    } 
 
     const hideErrorToast = () => {
         if (isErrorToastVisible.value) {   

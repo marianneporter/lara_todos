@@ -68,21 +68,37 @@
   
     const addTodo = async () => {
 
-        try {
-          
-            const response = await axios.post(route('todos.store'),
+        let response
+        try {          
+            response = await axios.post(route('todos.store'),
                             {
                             task: form.value.task,
                             todo_list_id: todoListStore.listSelected.id
                             })  
-           
-            todoListStore.addTodo(response.data.addedTodo)         
-            showSuccess(form.value.task)         
-            closeForm()
+ 
         }
         catch (error) { 
-            //handle validation errors          
-            if (error.response && error.response.status === 422 && error.response.data.errors)
+            //handle validation errors                
+            handleErrors(error)
+            return
+        }
+          
+        todoListStore.addTodo(response.data.addedTodo)         
+        showSuccess(form.value.task)         
+        closeForm()
+
+    }
+     
+    const showSuccess = (task) => {    
+        toast.add({severity:'success', 
+                   summary: 'Success!',
+                   detail: `The ${task} task has been added`, 
+                   life: 6000
+        });
+    }
+
+    const handleErrors = (error) => {
+        if (error.response && error.response.status === 422 && error.response.data.errors)
             {     
                 formErrors = getValidationErrors(error.response.data.errors)              
                 
@@ -103,15 +119,6 @@
                 form.value.task = ''; 
                 closeForm()              
             }              
-        }
-    }
-     
-    const showSuccess = (task) => {    
-        toast.add({severity:'success', 
-                   summary: 'Success!',
-                   detail: `The ${task} task has been added`, 
-                   life: 6000
-        });
     }
     
     // hide error toast as soon as user starts to type in field

@@ -42,22 +42,34 @@
   
     const updateList = async () => {
 
+        let response
         try {
-            const response = await axios.patch(route('todo-lists.update', 
+            response = await axios.patch(route('todo-lists.update', 
                                                      {id: props.list.id}),
-                            {
-                            name: form.value.name,
-                            })  
-           
-            todoListStore.updateList(response.data.updatedTodoList)         
-            showSuccess(form.value.name)
-            form.value.name = '' 
-            emits('endListEdit')
+                { name: form.value.name })  
         }
-        catch (error) { 
-            //handle validation errors
-      
-            if (error.response && error.response.status === 422 && error.response.data.errors)
+        catch (error) {  
+            handleErrors(error)
+            return
+        }
+ 
+        todoListStore.updateList(response.data.updatedTodoList)         
+        showSuccess(form.value.name)
+        form.value.name = '' 
+        emits('endListEdit')
+    }
+     
+    const showSuccess = (listName) => {    
+        toast.add({severity:'success', 
+                   summary: 'Success!',
+                   detail: `The ${listName} list has been updated`, 
+                   life: 4000
+                   });
+    }
+
+    const handleErrors = (error) => {
+          //handle validation errors      
+          if (error.response && error.response.status === 422 && error.response.data.errors)
             {     
                 formErrors = getValidationErrors(error.response.data.errors)              
                 
@@ -77,16 +89,6 @@
                 });
                 form.value.name = '';                
             }              
-        }
-    }
-
-     
-    const showSuccess = (listName) => {    
-        toast.add({severity:'success', 
-                   summary: 'Success!',
-                   detail: `The ${listName} list has been updated`, 
-                   life: 4000
-                   });
     }
     
     // hide error toast as soon as user starts to type in field
