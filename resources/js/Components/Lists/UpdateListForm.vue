@@ -85,7 +85,7 @@
         toast.add({severity:'success', 
                    summary: 'Success!',
                    detail: `The ${listName} list has been updated`, 
-                   life: 6000
+                   life: 4000
                    });
     }
     

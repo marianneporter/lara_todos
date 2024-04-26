@@ -7,8 +7,8 @@
                 <div class="panel max-w-screen-md">
                     <Lists :todoLists="todoLists" @new-list-selected="showTodos"
                             v-show="screenWidth > 767 || listsVisible"   />
-                </div>
-                <div v-if="todoLists.length > 0" class="panel">
+                </div>             
+                <div v-if="currentTodoLists.length > 0" class="panel">
                     <Todos @back-to-list-mode="showLists" :screenWidth="screenWidth"
                            :key="listSelected.id"
                             v-show="screenWidth > 767 || todosVisible" />
@@ -19,13 +19,15 @@
 </template>
   
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useTodoListStore } from '@/Stores/todoListStore'
 import { useHandleScreenWidth } from '@/Composables/useHandleScreenWidth'
 import Layout from '@/Shared/Layout.vue'
 import Lists from '@/Components/Lists/Lists.vue'
 import Todos from '@/Components/Todos/Todos.vue'
+
+const { screenWidth } = useHandleScreenWidth()
 
 const props = defineProps({
     message: String,
@@ -35,8 +37,7 @@ const props = defineProps({
 const todoListStore = useTodoListStore()
 todoListStore.setTodoLists(props.todoLists)
 const { listSelected } = storeToRefs(todoListStore);  
-
-const { screenWidth } = useHandleScreenWidth()
+const currentTodoLists = computed(() => todoListStore.todoLists);
 
 const todosActive = ref(false);
 const listsActive = ref(true);
@@ -70,8 +71,6 @@ const showLists = () => {
 
 <style scoped>
 
-
-
 /* Larger screens: side-by-side layout */
 @media (min-width: 768px) {
   .panels-container {
@@ -90,7 +89,7 @@ const showLists = () => {
     .dashboard-container {
         overflow: hidden;
         position: relative;
-        width: 100%;
+        width: 95%;
         height: 100vh;
     }
 

@@ -104,7 +104,7 @@
         toast.add({severity:'success', 
                    summary: 'Success!',
                    detail: `The ${task} task has been updated`, 
-                   life: 6000
+                   life: 4000
         });
     }
     

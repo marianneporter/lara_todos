@@ -22,6 +22,10 @@ export const useTodoListStore = defineStore('taskStore', {
             return [{ id: 0, name: 'All'}, ...this.getListData];
         },   
 
+        getTodoLists() {
+            return [...this.todoLists]
+        },
+
         getTodosForList() {  
             let currentToDoList = this.todoLists.find(t => t.id === this.listSelected.id);        
             return currentToDoList ? currentToDoList.todos : [];

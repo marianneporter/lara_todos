@@ -96,8 +96,7 @@
                 });
                 form.value.name = ''; 
                 closeForm();
-            }
-               
+            }               
         }
     }
  
@@ -105,7 +104,7 @@
         toast.add({severity:'success', 
                    summary: 'Success!',
                    detail: `The ${listName} list has been added`, 
-                   life: 6000
+                   life: 4000
                    });
     } 
 
