@@ -1,4 +1,5 @@
 <?php
+use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TodoController;
 use App\Http\Controllers\TodoListController;
@@ -17,6 +18,10 @@ Route::post('/register', [RegisterController::class, 'register'])
                                    ->name('register.submit');
 Route::post('/logout', [LoginController::class, 'logout'])
                                    ->name('logout');
+Route::get('/about', function () {
+    return Inertia::render('About');
+})->name('about');
+
 
 // Authenticated routes
 Route::middleware(['auth'])->group(function () {
