@@ -1,18 +1,18 @@
 <template>
-    <nav class="nav bg-blue-950 text-white flex justify-between px-4">  <!-- relative container for nav -->   
+    <nav class="nav bg-blue-950 text-white flex justify-between px-4 h-12">    
           
-            <div class="title-nav w-full lg:w-auto flex-1 flex justify-between ">
-                <h3 class="text-xl -mt-0.5 h-full pt-[0.7rem] pr-3">Lara Todos</h3>
+            <div class="title-nav w-full lg:w-auto flex-1 flex justify-between items-center lg:justify-start">
+                <h3 class="text-xl lg:flex items-center">Lara Todos</h3>
                 <Link :href="route('dashboard')" 
-                       class="hidden lg:block ml-4 hover:bg-blue-900 py-3 px-2">
+                       class="hidden lg:flex items-center h-full ml-8  hover:bg-blue-900">
                        Dashboard
                 </Link>
                 <Link :href="route('about')" 
-                       class="hidden lg:block hover:bg-blue-900 py-3 px-2 ">
+                       class="hidden lg:flex items-center h-full px-4 hover:bg-blue-900">
                           About
                 </Link>
-                <div class="py-3">
-                    <button @click="menuOpen = !menuOpen"
+                <div >
+                    <button @click="toggleMenu"
                             :class="{ 'open': menuOpen }" class="lg:hidden hamburger">
                         <span></span>
                         <span></span>
@@ -26,27 +26,28 @@
                 :class="{'auth-options-visible': menuOpen, 
                         'auth-options-not-visible': !menuOpen }">
                 <Link :href="route('dashboard')" 
-                       class="block lg:hidden ml-4 hover:bg-blue-900 py-2 px-1">
+                       class="block lg:hidden mx-auto hover:bg-blue-900 py-2 px-1 w-32">
                             Dashboard
                 </Link>
                 <Link :href="route('about')" 
-                       class="block lg:hidden hover:bg-blue-900 py-2 px-1 ">
-                            About
+                       class="block lg:hidden mx-auto hover:bg-blue-900 py-2 px-1 w-32">
+                    About
                 </Link>
-                <div class="bg-white h-[0.1rem] w-32 mx-auto mt-2"></div>
-                <div v-if="!username" class="flex flex-col lg:flex-row gap-4">
+                <div class="lg:hidden bg-white h-[0.1rem] w-32 mx-auto mt-2"></div>
+
+                <div v-if="!username" class="flex flex-col lg:flex-row items-stretch gap-4 h-full">
                     <Link :href="route('register.show')" 
-                          class="block py-3 px-2 hover:bg-blue-900">
+                          class="block px-2 hover:bg-blue-900 lg:flex lg:items-center">
                             Register
                     </Link>
                     <Link :href="route('login')" 
-                          class="block py-3 px-2 hover:bg-blue-900">
+                          class="block px-2 hover:bg-blue-900 lg:flex lg:items-center">
                             Login
                     </Link>
                 </div>   
-                <div v-else class="flex flex-col lg:flex-row gap-4">
-                    <div class="hidden lg:block py-3">Welcome {{ username }}</div>
-                    <button @click="logout" class="block pt-3 pb-6 px-2 hover:bg-blue-900">
+                <div v-else class="flex flex-col lg:flex-row lg:items-center gap-4 h-full">
+                    <div class="hidden lg:block">Welcome {{ username }}</div>
+                    <button @click="logout" class="block  w-32 h-full mx-auto mt-2 mb-5 lg:my-0 px-2 py-2 hover:bg-blue-900">
                             Log out
                     </button>          
                 </div>                
@@ -65,17 +66,32 @@ const username = computed(() => props.auth.username);
 
 const menuOpen = ref(false);
 
-const logout = () => {
-    axios.post('/logout')
-    .then(response => {
-        if (response.data.success) {     
-            window.location.href = '/';          
-        }
-    })
-    .catch(error => {
-        console.error("Logout failed", error);                  
-    });   
+const toggleMenu = () => {
+    if (menuOpen.value) {
+        // When closing, wait for the animation to complete before setting menuOpen to false
+        setTimeout(() => menuOpen.value = false, 500);
+    } else {
+        menuOpen.value = true;
+    }
 }
+
+const logout = async () => {
+    try {
+        const response = await axios.post('/logout');
+        if (response.data.success) {  
+            if (menuOpen.value) {
+                // Close the menu before logging out
+                menuOpen.value = false;
+                setTimeout(() => window.location.href = '/', 500); // Delay redirection
+            } else {
+                window.location.href = '/';
+            }     
+        }
+    } catch (error) {
+        console.error("Logout failed", error);                  
+    }   
+}
+
 
 </script>
 
@@ -94,27 +110,27 @@ const logout = () => {
         }
 
         .auth-options {
-            position: absolute;
-            right: 0;
-            left: 0;
-            transition: top 0.5s ease, opacity 0.1s ease 0.5s, visibility 0.1s 0.6s; 
-            z-index: 50; 
-            display: block;  
-            text-align: center;      
-        }
+    position: absolute;
+    right: 0;
+    left: 0;
+    transition: top 0.5s ease, opacity 0.5s ease; /* Standardized transition */
+    z-index: 50; 
+    display: block;  
+    text-align: center;
+}
 
-        .auth-options-visible {
-            top: 100%;
-            opacity: 1;
-            transition-delay: 0s;
-            visibility: visible;
-        }
+.auth-options-visible {
+    top: 100%;
+    opacity: 1;
+    visibility: visible;
+}
 
-        .auth-options-not-visible {
-            top: -6rem; 
-            opacity: 0;
-            visibility: hidden;
-        }
+.auth-options-not-visible {
+    top: -6rem; 
+    opacity: 0;
+    visibility: hidden;
+    transition: top 0.5s ease, opacity 0.5s ease, visibility 0s 0.5s; 
+}
 
         /* Style for the hamburger button */
         .hamburger {
