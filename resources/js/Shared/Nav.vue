@@ -22,9 +22,9 @@
 
             </div>
               
-            <div class="auth-options bg-blue-950"
-                :class="{'auth-options-visible': menuOpen, 
-                        'auth-options-not-visible': !menuOpen }">
+            <div class="auth-and-mobile bg-blue-950"
+                :class="{'auth-and-mobile-visible': menuOpen, 
+                        'auth-and-mobile-not-visible': !menuOpen }">
                 <Link :href="route('dashboard')" 
                        class="block lg:hidden mx-auto hover:bg-blue-900 py-2 px-1 w-32">
                             Dashboard
@@ -67,8 +67,7 @@ const username = computed(() => props.auth.username);
 const menuOpen = ref(false);
 
 const toggleMenu = () => {
-    if (menuOpen.value) {
-        // When closing, wait for the animation to complete before setting menuOpen to false
+    if (menuOpen.value) {  
         setTimeout(() => menuOpen.value = false, 500);
     } else {
         menuOpen.value = true;
@@ -79,8 +78,7 @@ const logout = async () => {
     try {
         const response = await axios.post('/logout');
         if (response.data.success) {  
-            if (menuOpen.value) {
-                // Close the menu before logging out
+            if (menuOpen.value) {              
                 menuOpen.value = false;
                 setTimeout(() => window.location.href = '/', 500); // Delay redirection
             } else {
@@ -109,28 +107,28 @@ const logout = async () => {
             position: relative; 
         }
 
-        .auth-options {
-    position: absolute;
-    right: 0;
-    left: 0;
-    transition: top 0.5s ease, opacity 0.5s ease; /* Standardized transition */
-    z-index: 50; 
-    display: block;  
-    text-align: center;
-}
+        .auth-and-mobile {
+            position: absolute;
+            right: 0;
+            left: 0;
+            transition: top 0.5s ease, opacity 0.5s ease; /* Standardized transition */
+            z-index: 50; 
+            display: block;  
+            text-align: center;
+        }
 
-.auth-options-visible {
-    top: 100%;
-    opacity: 1;
-    visibility: visible;
-}
+        .auth-and-mobile-visible {
+            top: 100%;
+            opacity: 1;
+            visibility: visible;
+        }
 
-.auth-options-not-visible {
-    top: -6rem; 
-    opacity: 0;
-    visibility: hidden;
-    transition: top 0.5s ease, opacity 0.5s ease, visibility 0s 0.5s; 
-}
+        .auth-and-mobile-not-visible {
+            top: -6rem; 
+            opacity: 0;
+            visibility: hidden;
+            transition: top 0.5s ease, opacity 0.5s ease, visibility 0s 0.5s; 
+        }
 
         /* Style for the hamburger button */
         .hamburger {
