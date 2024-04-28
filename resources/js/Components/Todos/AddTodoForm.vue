@@ -37,30 +37,30 @@
         todo: Object
     }) 
 
+    const todoListStore = useTodoListStore()
+
     const emits = defineEmits(['formClosed'])
     
     const closeForm = () => {
       isFormVisible.value = false 
       form.value.task = ''
       emits('formClosed')
-    };  
-
-    const todoListStore = useTodoListStore()
+    };   
 
     const form = ref({ task: '' })
-    let formErrors = {}   
 
-    const { getValidationErrors } = useHandleErrors()
-    
-    const toast = useToast()
-    const isErrorToastVisible = ref(false)
-    const errorToastKey = 'errorToastKey'     
-    
+    const toast = useToast()      
+    const { handleErrors,  
+            hideErrorToast } = useHandleErrors(toast,
+                                             'add',   
+                                              'list', 
+                                              form.value.name)
 
     const isFormVisible = ref(false)
     const makeFormVisible = () => {
       isFormVisible.value = true;     
     };
+
     // expose the make form visible method so it can be called from dashboard
     defineExpose({
         makeFormVisible
@@ -79,7 +79,15 @@
         }
         catch (error) { 
             //handle validation errors                
-            handleErrors(error)
+            let errorType = handleErrors(error,
+                            'add',
+                            'todo',                                        
+                            form.value.task)   
+                 
+            if (errorType === 'serverError') {               
+                form.value.task = '' 
+                closeForm()     
+            }      
             return
         }
           
@@ -97,37 +105,6 @@
         });
     }
 
-    const handleErrors = (error) => {
-        if (error.response && error.response.status === 422 && error.response.data.errors)
-            {     
-                formErrors = getValidationErrors(error.response.data.errors)              
-                
-                toast.add({severity:'error', 
-                    summary: 'Error!',                              
-                    detail: `${formErrors.task}`,
-                    key: errorToastKey                   
-               });   
-
-               isErrorToastVisible.value = true
-            }
-            else { 
-                //handle any other errors from axios call     
-                toast.add({severity:'error', 
-                    summary: 'Something went Wrong',
-                    detail: `Unable to add ${form.value.task} task`                 
-                });
-                form.value.task = ''; 
-                closeForm()              
-            }              
-    }
-    
-    // hide error toast as soon as user starts to type in field
-    const hideErrorToast = () => {       
-        if (isErrorToastVisible.value) {   
-            toast.remove(errorToastKey);
-            isErrorToastVisible.value = false;
-        }  
-    }
 </script>
 
 <style scoped>

@@ -32,32 +32,32 @@
     import { useTodoListStore } from '@/Stores/todoListStore'
     import { useToast } from 'primevue/usetoast'
     import { useHandleErrors } from '@/Composables/useHandleErrors';
-    import { ref } from 'vue'
-    
+    import { ref } from 'vue'   
     const props= defineProps({
         formVisible: Boolean
     }) 
 
     const emits = defineEmits(['formClosed'])
    
-    const form = ref({ name: '' })
-    let formErrors = {}
+    const form = ref({ name: '' })    
 
     const isFormVisible = ref(false)
     const makeFormVisible = () => {
       isFormVisible.value = true;     
     };
 
-    const { getValidationErrors } = useHandleErrors()
-
     const toast = useToast()
-    const isErrorToastVisible = ref(false)
-    const errorToastKey = 'errorToastKey'    
+
+    const { handleErrors,  
+            hideErrorToast } = useHandleErrors(toast,
+                                             'add',   
+                                             'list', 
+                                              form.value.name)   
     
-    const closeForm = () => {
-      isFormVisible.value = false 
-      form.value.name=''
-      emits('formClosed')
+    const closeForm = () => {  
+        isFormVisible.value = false 
+        form.value.name=''
+        emits('formClosed')
     };
 
    // Expose the toggleFormVisibility so it can be accessed from dashboard
@@ -68,19 +68,27 @@
     const todoListStore = useTodoListStore()
   
     const addNewList = async () => {
-        let response
+        let response      
         try {
             response = await axios.post('/todo-lists', {
                name: form.value.name,
             }) 
         }
-        catch (error) { 
-            handleErrors(error)
+        catch (error) {   
+            let errorType = handleErrors(error,
+                                        'add',
+                                        'list',                                        
+                                         form.value.name)         
+            if (errorType === 'serverError') {               
+                form.value.name = '' 
+                closeForm()     
+            }      
             return
         }
 
         todoListStore.addList(response.data.addedTodoList)         
         showSuccess(form.value.name)  
+        console.log('at the end of the valid bit')
         closeForm()
     }
  
@@ -90,37 +98,7 @@
                    detail: `The ${listName} list has been added`, 
                    life: 4000
                    });
-    } 
-
-    const handleErrors = (error) => {
-           //handle validation errors
-           if (error.response && error.response.status === 422 && error.response.data.errors)
-            {     
-                formErrors = getValidationErrors(error.response.data.errors)          
-                
-                toast.add({severity:'error', 
-                    summary: 'Error!',                              
-                    detail: `${formErrors.name}`,
-                    key: errorToastKey                   
-               });            
-               isErrorToastVisible.value = true
-            } else { 
-                //handle any other errors from axios call     
-                toast.add({severity:'error', 
-                    summary: 'Something went Wrong',
-                    detail: `Unable to add ${form.value.name} list`                 
-                });
-                form.value.name = ''; 
-                closeForm();
-            }               
-    }
-
-    const hideErrorToast = () => {
-        if (isErrorToastVisible.value) {   
-            toast.remove(errorToastKey);
-            isErrorToastVisible.value = false;
-        }  
-    }   
+    }  
 
 </script>
 

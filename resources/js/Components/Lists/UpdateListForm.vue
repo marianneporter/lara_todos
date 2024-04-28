@@ -33,13 +33,14 @@
     let formErrors = {}
   
     const emits = defineEmits(['endListEdit'])
-
-    const { getValidationErrors } = useHandleErrors()
     
     const toast = useToast()
-    const isErrorToastVisible = ref(false)
-    const errorToastKey = 'errorToastKey'    
-  
+    
+    const { handleErrors,  
+            hideErrorToast } = useHandleErrors(toast,
+                                             'update',   
+                                             'list', 
+                                              form.value.name)   
     const updateList = async () => {
 
         let response
@@ -49,7 +50,14 @@
                 { name: form.value.name })  
         }
         catch (error) {  
-            handleErrors(error)
+            let errorType = handleErrors(error,
+                                        'update',
+                                        'list',                                        
+                                         form.value.name)         
+            if (errorType === 'serverError') {               
+                form.value.name = '' 
+                closeForm()     
+            }      
             return
         }
  
@@ -65,39 +73,7 @@
                    detail: `The ${listName} list has been updated`, 
                    life: 4000
                    });
-    }
-
-    const handleErrors = (error) => {
-          //handle validation errors      
-          if (error.response && error.response.status === 422 && error.response.data.errors)
-            {     
-                formErrors = getValidationErrors(error.response.data.errors)              
-                
-                toast.add({severity:'error', 
-                    summary: 'Error!',                              
-                    detail: `${formErrors.name}`,
-                    key: errorToastKey                   
-               });   
-
-               isErrorToastVisible.value = true
-            }
-            else { 
-                //handle any other errors from axios call     
-                toast.add({severity:'error', 
-                    summary: 'Something went Wrong',
-                    detail: `Unable to update ${form.value.name} list`                 
-                });
-                form.value.name = '';                
-            }              
-    }
-    
-    // hide error toast as soon as user starts to type in field
-    const hideErrorToast = () => {       
-        if (isErrorToastVisible.value) {   
-            toast.remove(errorToastKey);
-            isErrorToastVisible.value = false;
-        }  
-    }
+    } 
 
     const cancelListEdit = () => {
         emits('endListEdit')

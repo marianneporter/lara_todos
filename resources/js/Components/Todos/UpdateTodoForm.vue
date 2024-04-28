@@ -29,7 +29,6 @@
                 <button type="submit" class="primary-btn ml-2 p-2">Save</button>                                       
             </div>
         </div>
-
     </form>   
 </template>
 
@@ -37,33 +36,41 @@
     import { ref } from 'vue'
     import axios from 'axios'
     import { useTodoListStore } from '@/Stores/todoListStore'
-    import { useToast } from 'primevue/usetoast'    
-  
-
+    import { useToast } from 'primevue/usetoast' 
     import { useHandleErrors } from '@/Composables/useHandleErrors';
 
     const props = defineProps({
         todo: Object
-    })   
+    })      
 
     const todoListStore = useTodoListStore()
 
     const form = ref({ task: props.todo.task,
-                       completed: props.todo.completed })
-    let formErrors = {}
+                       completed: props.todo.completed })   
   
     const emits = defineEmits(['endTodoEdit'])
-
-    const { getValidationErrors } = useHandleErrors()
     
+    const isFormVisible = ref(false)
+    const makeFormVisible = () => {
+        isFormVisible.value = true;     
+    };
+
     const toast = useToast()
-    const isErrorToastVisible = ref(false)
-    const errorToastKey = 'errorToastKey'    
-  
+    const { handleErrors,  
+            hideErrorToast } = useHandleErrors(toast,
+                                             'add',   
+                                             'list', 
+                                             form.value.name)          
+    const closeForm = () => {  
+        isFormVisible.value = false 
+        form.value.name=''
+        emits('endTodoEdit')
+    };
+
     const updateTodo = async () => {
         try {  
             let response
-            response = await axios.patch(route('todos.update', 
+            response = await axios.patch(route('todos.updatee', 
                                                         {id: props.todo.id}),
                             {
                             task: form.value.task,
@@ -76,8 +83,17 @@
             emits('endTodoEdit')
         }
         catch (error) { 
-            //  handle validation errors            
-            handleErrors(error)
+            //  handle validation errors    
+
+            let errorType = handleErrors(error,
+                            'update',
+                            'todo',                                        
+                            form.value.task)                              
+              
+            if (errorType === 'serverError') {               
+                form.value.task = '' 
+                closeForm()     
+            }      
             return
         }
     }
@@ -89,38 +105,7 @@
                    life: 4000
         });
     }
-
-    const handleErrors = (error) => {
-        if (error.response && error.response.status === 422 && error.response.data.errors)
-            {     
-                formErrors = getValidationErrors(error.response.data.errors)              
-                
-                toast.add({severity:'error', 
-                    summary: 'Error!',                              
-                    detail: `${formErrors.task}`,
-                    key: errorToastKey                   
-               });   
-
-               isErrorToastVisible.value = true
-            }
-            else { 
-                //handle any other errors from axios call     
-                toast.add({severity:'error', 
-                    summary: 'Something went Wrong',
-                    detail: `Unable to update ${form.value.task} task`                 
-                });
-                form.value.task = '';                
-            }              
-    }
-    
-    // hide error toast as soon as user starts to type in field
-    const hideErrorToast = () => {       
-        if (isErrorToastVisible.value) {   
-            toast.remove(errorToastKey);
-            isErrorToastVisible.value = false;
-        }  
-    }
-
+   
     const cancelTodoEdit = (event) => {
         emits('endTodoEdit')
         event.preventDefault()
