@@ -27,10 +27,10 @@
     
 </template>
 
-<script setup>
-    import axios from 'axios'
+<script setup>  
     import { useTodoListStore } from '@/Stores/todoListStore'
     import { useToast } from 'primevue/usetoast'
+    import DBService from '@/Services/DBService'
     import { useHandleErrors } from '@/Composables/useHandleErrors';
     import { ref } from 'vue'   
     const props= defineProps({
@@ -68,12 +68,11 @@
     const todoListStore = useTodoListStore()
   
     const addNewList = async () => {
-        let response      
+       
+        let response  
         try {
-            response = await axios.post('/todo-lists', {
-               name: form.value.name,
-            }) 
-        }
+            response = await DBService.addList({ name: form.value.name });
+        }       
         catch (error) {   
             let errorType = handleErrors(error,
                                         'add',
@@ -87,8 +86,7 @@
         }
 
         todoListStore.addList(response.data.addedTodoList)         
-        showSuccess(form.value.name)  
-        console.log('at the end of the valid bit')
+        showSuccess(form.value.name)      
         closeForm()
     }
  

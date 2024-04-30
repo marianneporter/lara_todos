@@ -18,7 +18,7 @@
 
 <script setup>
     import { ref } from 'vue'
-    import axios from 'axios'
+    import DBService from '@/Services/DBService'
     import { useTodoListStore } from '@/Stores/todoListStore'
     import { useToast } from 'primevue/usetoast'
     import { useHandleErrors } from '@/Composables/useHandleErrors';
@@ -43,11 +43,10 @@
                                               form.value.name)   
     const updateList = async () => {
 
-        let response
-        try {
-            response = await axios.patch(route('todo-lists.update', 
-                                                     {id: props.list.id}),
-                { name: form.value.name })  
+        let updatedTodoList
+        try {      
+            updatedTodoList = await DBService.updateList(props.list.id, 
+                                                  { name: form.value.name })  
         }
         catch (error) {  
             let errorType = handleErrors(error,

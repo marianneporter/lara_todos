@@ -3,41 +3,25 @@ import { ref } from 'vue'
 export function useHandleErrors(toast) {
 
     const isErrorToastVisible = ref(false)
-    const errorToastKey = 'errorToastKey'    
-    
-    // organizes form errors into an object with the 
-    // key being the field name followed by the error message
-    const getValidationErrors = (errors) => {
-        let validationErrors = new Object()
-        Object.keys(errors).forEach((inputName) => {
-            validationErrors[inputName] = errors[inputName][0] 
-        })
-        return validationErrors
-    }
+    const errorToastKey = 'errorToastKey'   
 
     const handleErrors = (error, action, type, name) => {
         //handle validation errors
-        if (error.response && error.response.status === 422 && error.response.data.errors)
-            {  
-                const errorObj = error.response.data.errors             
-                const errorKeys = Object.keys(errorObj)
-                const errorPropertyName = errorKeys[0]
-                const errorForToast = errorObj[errorPropertyName][0]   
-                
+        if (error.errorType === 'validationError')
+            {                  
                 toast.add({severity:'error', 
                     summary: 'Error!',                              
-                    detail: errorForToast,
+                    detail: error.errorMessage,
                     key: errorToastKey                   
-            });            
-            isErrorToastVisible.value = true
-            return 'validationError' }
+                });            
+                isErrorToastVisible.value = true
+           }
         else { 
-            //handle any other errors from axios call     
+            //handle any server errors    
             toast.add({severity:'error', 
                 summary: 'Something went Wrong',
                 detail: `Unable to ${action} ${name} ${type}`                 
-            });
-            return 'serverError'
+            });           
         }               
     }
 
@@ -51,7 +35,6 @@ export function useHandleErrors(toast) {
     return {  handleErrors, 
               isErrorToastVisible,
               errorToastKey,
-              hideErrorToast,
-              getValidationErrors
+              hideErrorToast             
             };
 }

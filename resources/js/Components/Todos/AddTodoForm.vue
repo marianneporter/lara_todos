@@ -28,7 +28,7 @@
 
 <script setup>
     import { ref } from 'vue'
-    import axios from 'axios'
+    import DBService from '@/Services/DBService'
     import { useTodoListStore } from '@/Stores/todoListStore'
     import { useToast } from 'primevue/usetoast'
     import { useHandleErrors } from '@/Composables/useHandleErrors';
@@ -68,30 +68,30 @@
   
     const addTodo = async () => {
 
-        let response
+        let addedTodo
         try {          
-            response = await axios.post(route('todos.store'),
+            addedTodo = await DBService.addTodo(
                             {
                             task: form.value.task,
+                            completed: false,
                             todo_list_id: todoListStore.listSelected.id
                             })  
- 
         }
         catch (error) { 
             //handle validation errors                
-            let errorType = handleErrors(error,
-                            'add',
-                            'todo',                                        
-                            form.value.task)   
+            handleErrors(error,
+                        'add',
+                        'todo',                                        
+                        form.value.task)   
                  
-            if (errorType === 'serverError') {               
+            if (error.errorType === 'serverError') {               
                 form.value.task = '' 
                 closeForm()     
             }      
             return
         }
           
-        todoListStore.addTodo(response.data.addedTodo)         
+        todoListStore.addTodo(addedTodo)         
         showSuccess(form.value.task)         
         closeForm()
 

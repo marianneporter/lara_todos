@@ -9,7 +9,7 @@ class TodoController extends Controller
 {
     public function store(Request $request)
     {
-        
+       
         $validated = $request->validate([
             'task' => 'required|string|min:2|max:40',            
         ], [

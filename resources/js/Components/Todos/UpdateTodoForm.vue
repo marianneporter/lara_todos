@@ -33,11 +33,11 @@
 </template>
 
 <script setup>
-    import { ref } from 'vue'
-    import axios from 'axios'
+    import { ref } from 'vue'   
     import { useTodoListStore } from '@/Stores/todoListStore'
     import { useToast } from 'primevue/usetoast' 
     import { useHandleErrors } from '@/Composables/useHandleErrors';
+    import DBService from '@/Services/DBService'
 
     const props = defineProps({
         todo: Object
@@ -68,34 +68,33 @@
     };
 
     const updateTodo = async () => {
-        try {  
-            let response
-            response = await axios.patch(route('todos.updatee', 
-                                                        {id: props.todo.id}),
+        console.log('in updateTodo method')
+        let updatedTodo
+        try {              
+            updatedTodo = await DBService.updateTodo(props.todo.id,
                             {
-                            task: form.value.task,
-                            completed: form.value.completed
-                            })  
-            
-            todoListStore.updateTodo(response.data.updatedTodo)         
-            showSuccess(form.value.task)
-            form.value.task = '' 
-            emits('endTodoEdit')
+                                task: form.value.task,
+                                completed: form.value.completed
+                            });  
         }
         catch (error) { 
-            //  handle validation errors    
-
-            let errorType = handleErrors(error,
-                            'update',
-                            'todo',                                        
-                            form.value.task)                              
+            //  handle validation errors          
+            handleErrors(error,
+                         'update',
+                         'todo',                                        
+                         form.value.task)                              
               
-            if (errorType === 'serverError') {               
+            if (error.errorType === 'serverError') {               
                 form.value.task = '' 
                 closeForm()     
             }      
             return
-        }
+        }           
+
+        todoListStore.updateTodo(updatedTodo)         
+        showSuccess(form.value.task)
+        form.value.task = '' 
+        emits('endTodoEdit')
     }
      
     const showSuccess = (task) => {    
