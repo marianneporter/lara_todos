@@ -47,10 +47,8 @@ class TodoListController extends Controller
         ]);
     }
 
-    public function destroy(Request $request, TodoList $todoList) {
-     
+    public function destroy(Request $request, TodoList $todoList) {      
        $todoList->delete();
-       return response()->json(['message' => 'TodoList deleted Successfully' ]);
-     
+       return response()->json(['message' => 'TodoList deleted Successfully' ]);     
     }
 }

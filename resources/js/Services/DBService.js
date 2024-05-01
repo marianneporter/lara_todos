@@ -1,14 +1,48 @@
 import axios from 'axios';
 
 export default { 
+
+    async addList(list) {
+        try {       
+            let response = await axios.post(route('todo-lists.store'), list)           
+            return response.data.addedTodoList           
+        }
+        catch (error) { 
+            //  handle and format validation errors         
+            let formattedError = this.formatError(error)
+            throw formattedError
+        }
+    },
+
+    async updateList(listId, listData) {
+        try {       
+            let response
+               = await axios.patch(route('todo-lists.update', {id: listId}), listData)
+            return response.data.updatedTodoList         
+        }
+        catch (error) { 
+            //  handle and format validation errors  
+            let formattedError = this.formatError(error)
+            throw formattedError
+        }
+    },
+
+    async deleteList(listId) {
+        try {             
+            await axios.delete(route('todo-lists.delete', { todoList: listId }));        
+         } catch (error) {
+            let formattedError = this.formatError(error)
+            throw formattedError          
+        }
+    },
+
     async addTodo(todo) { 
         try {       
             let response = await axios.post(route('todos.store'), todo)           
             return response.data.addedTodo           
         }
         catch (error) { 
-            //  handle and format validation errors   
-            console.log(error)  
+            //  handle and format validation errors           
             let formattedError = this.formatError(error)
             throw formattedError
         }
@@ -32,6 +66,16 @@ export default {
             //  handle and format validation errors  
             console.log('in catch of service')    
             console.log(error)      
+            let formattedError = this.formatError(error)
+            throw formattedError
+        }
+    },
+
+    async deleteTodo(todoId) {
+        try {
+            await axios.delete(route('todos.delete', { todo: todoId }));
+        } catch(error) {
+            //  handle and format validation errors           
             let formattedError = this.formatError(error)
             throw formattedError
         }

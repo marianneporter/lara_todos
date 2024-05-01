@@ -53,6 +53,7 @@
 <script setup>
     import AddListForm from '@/Components/Lists/AddListForm.vue'
     import UpdateListForm from "@/Components/Lists/UpdateListForm.vue"
+    import DBService from "@/Services/DBService"
     import { useTodoListStore } from '@/Stores/todoListStore'   
     import { storeToRefs } from 'pinia'
     import { ref } from 'vue';    
@@ -112,24 +113,25 @@
     }; 
 
     const deleteList = async (list) => {
-        try {
-            const response
-              = await axios.delete(route('todo-lists.delete', { todoList: list.id }));
-          
-            todoListStore.deleteList(list.id) 
-
-            toast.add({severity:'success', 
-                   summary: 'Success!',
-                   detail: `The ${list.name} list has been deleted`, 
-                   life: 3000
-                });
-           
+        
+        try {          
+           await DBService.deleteList(list.id);          
         } catch (error) {
             toast.add({severity:'error', 
                     summary: 'Error!',                              
                     detail: `Unable to delete ${list.name}`                                     
             });  
+            return
         }
+
+        // Update UI and show success toast after successful delete
+        todoListStore.deleteList(list.id) 
+
+        toast.add({severity:'success', 
+            summary: 'Success!',
+            detail: `The ${list.name} list has been deleted`, 
+            life: 3000
+        });
     };
     
 </script>

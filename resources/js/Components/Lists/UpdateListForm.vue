@@ -30,9 +30,19 @@
     const todoListStore = useTodoListStore()
 
     const form = ref({ name: props.list.name })
-    let formErrors = {}
-  
+   
     const emits = defineEmits(['endListEdit'])
+
+    const isFormVisible = ref(false)
+    const makeFormVisible = () => {
+      isFormVisible.value = true;     
+    };
+
+    const closeForm = () => {  
+        isFormVisible.value = false 
+        form.value.name=''
+        emits('endListEdit')
+    };
     
     const toast = useToast()
     
@@ -49,18 +59,18 @@
                                                   { name: form.value.name })  
         }
         catch (error) {  
-            let errorType = handleErrors(error,
-                                        'update',
-                                        'list',                                        
-                                         form.value.name)         
-            if (errorType === 'serverError') {               
+            handleErrors(error,
+                        'update',
+                        'list',                                        
+                        form.value.name)         
+            if (error.errorType === 'serverError') {               
                 form.value.name = '' 
                 closeForm()     
             }      
             return
         }
  
-        todoListStore.updateList(response.data.updatedTodoList)         
+        todoListStore.updateList(updatedTodoList)         
         showSuccess(form.value.name)
         form.value.name = '' 
         emits('endListEdit')

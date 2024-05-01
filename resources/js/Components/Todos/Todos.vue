@@ -79,6 +79,7 @@
     import UpdateTodoForm from '@/Components/Todos/UpdateTodoForm.vue'
     import { useConfirm } from 'primevue/useconfirm'
     import { useToast } from 'primevue/usetoast'
+import DBService from '@/Services/DBService'
     
     const props = defineProps({
         screenWidth: {
@@ -181,24 +182,25 @@
 
     const deleteTodo = async (todo) => {
 
-        try {
-            const response
-             = await axios.delete(route('todos.delete', { todo: todo.id }));
-
-            todoListStore.deleteTodo(todo.id)
-
-            toast.add({severity:'success', 
-                  summary: 'Success!',
-                  detail: `The ${todo.task} todo has been deleted`, 
-                  life: 3000
-               });
-          
-        } catch (error) {
+        try {   
+            await DBService.deleteTodo(todo.id)           
+        }
+        catch (error) {
             toast.add({severity:'error', 
                    summary: 'Error!',                              
                    detail: `Unable to delete ${todo.task}`                                     
             });  
+            return
         }
+
+        // update ui  
+        todoListStore.deleteTodo(todo.id)
+
+        toast.add({severity:'success', 
+            summary: 'Success!',
+            detail: `The ${todo.task} todo has been deleted`, 
+            life: 3000
+        });
     };
 
 

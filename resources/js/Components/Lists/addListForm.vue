@@ -69,23 +69,23 @@
   
     const addNewList = async () => {
        
-        let response  
+        let addedList  
         try {
-            response = await DBService.addList({ name: form.value.name });
+            addedList = await DBService.addList({ name: form.value.name });
         }       
         catch (error) {   
-            let errorType = handleErrors(error,
-                                        'add',
-                                        'list',                                        
-                                         form.value.name)         
-            if (errorType === 'serverError') {               
+            handleErrors(error,
+                        'add',
+                        'list',                                        
+                        form.value.name)         
+            if (error.errorType === 'serverError') {               
                 form.value.name = '' 
                 closeForm()     
             }      
             return
         }
 
-        todoListStore.addList(response.data.addedTodoList)         
+        todoListStore.addList(addedList)         
         showSuccess(form.value.name)      
         closeForm()
     }
