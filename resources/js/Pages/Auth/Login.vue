@@ -4,6 +4,10 @@
             <h1 class="text-3xl mb-4 text-blue-950">Login</h1>
             <form @submit.prevent="submit" class="text-gray-700" >
 
+                <div v-if="serverError" class="mb-4 text-red-500 text-sm">
+                    {{ serverError }}
+                </div>
+
                 <div class="mb-6">
                     <label class="block mb-2 font-bold text-xs text-gray-700">
                     Email
@@ -52,12 +56,21 @@
 
 <script setup>
     import { useForm } from "@inertiajs/vue3"
+    import { usePage } from '@inertiajs/vue3'
+    import { computed } from 'vue'
     import Layout from "@/Shared/Layout.vue"
 
     let form = useForm({
         email: '',
         password: ''
     })
+
+    const page = usePage()
+
+    // get error from flash message if authentiation rejected on server
+
+    const serverError = computed(() => page.props.flash.message);
+    console.log(page.props)
 
     const submit = () => form.post(route('authenticate'));
 

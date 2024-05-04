@@ -79,7 +79,7 @@
     import UpdateTodoForm from '@/Components/Todos/UpdateTodoForm.vue'
     import { useConfirm } from 'primevue/useconfirm'
     import { useToast } from 'primevue/usetoast'
-import DBService from '@/Services/DBService'
+    import DBService from '@/Services/DBService'
     
     const props = defineProps({
         screenWidth: {
@@ -120,13 +120,11 @@ import DBService from '@/Services/DBService'
         // optimistically toggle completion in store  
         const newStatus = todoListStore.toggleTodoCompletion(todo.id);
 
-        try {           
-            const response = await axios.patch(route('todos.toggleCompletion', { todo: todo.id }), {
-                completed: newStatus
-            });
+        try {               
+            let successfulToggle = await DBService.toggleCompleted(todo.id, newStatus)
             
-            if (response.status !== 200) {
-                throw new Error('Failed to update todo status');
+            if ( !successfulToggle ) {
+                throw 'Error in updating completion status'
             }
 
         } catch (error) {
@@ -159,7 +157,6 @@ import DBService from '@/Services/DBService'
         } else {
             return `Tasks for: ${listSelected.value.name}`
         }
-
     })
 
     const editTodo = (todo) => {

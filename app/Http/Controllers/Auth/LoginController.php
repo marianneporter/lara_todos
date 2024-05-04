@@ -24,17 +24,10 @@ class LoginController extends Controller
         ]);
   
  
-        if (Auth::attempt($credentials)) {
-     
+        if (Auth::attempt($credentials)) {     
            
-            $request->session()->regenerate(); 
-       
-            Log::info('************************User ID after login attempt: ' . auth()->id());    
-            Log::info('*************************Is authenticated: ' . Auth::check());    
-         //   return redirect()->intended('dashboard');
-
-          return redirect('/');
-
+            $request->session()->regenerate();  
+            return redirect('/');
         }
        
         Log::info('*************************login failed '); 

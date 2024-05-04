@@ -1,3 +1,7 @@
+/**************************************************************************/
+/* Service to handle Update/Add/Deletion for Lists and Todos Using Axios */
+/**************************************************************************/
+
 import axios from 'axios';
 
 export default { 
@@ -30,7 +34,7 @@ export default {
     async deleteList(listId) {
         try {             
             await axios.delete(route('todo-lists.delete', { todoList: listId }));        
-         } catch (error) {
+        } catch (error) {
             let formattedError = this.formatError(error)
             throw formattedError          
         }
@@ -64,8 +68,7 @@ export default {
         }
         catch (error) { 
             //  handle and format validation errors  
-            console.log('in catch of service')    
-            console.log(error)      
+     
             let formattedError = this.formatError(error)
             throw formattedError
         }
@@ -76,6 +79,30 @@ export default {
             await axios.delete(route('todos.delete', { todo: todoId }));
         } catch(error) {
             //  handle and format validation errors           
+            let formattedError = this.formatError(error)
+            throw formattedError
+        }
+    },
+
+    
+    async toggleCompleted(todoId, newStatus) {
+        console.log('in toggle completion')
+        try {       
+            let response = await axios.patch(route('todos.toggleCompletion',
+                                            { todo: todoId }), 
+            {
+                completed: newStatus
+            });
+
+            if (response.status === 200) {
+                return true
+            } else {
+                throw this.createNewError('Could not toggle complete', response.status)
+            }   
+        }
+
+        catch (error) { 
+            //  handle and format validation errors         
             let formattedError = this.formatError(error)
             throw formattedError
         }
@@ -93,7 +120,7 @@ export default {
 
             return {
                 errorType: 'validationError',
-                errorMessage: errorMessage
+                errorMessage: errorMessage             
             }  
         }
         else { 
@@ -101,9 +128,16 @@ export default {
             console.log('in server errors bit')   
             return {
                 errorType: 'serverError',
-                errorMessage: ''
+                errorMessage: error.message || 'Error Toggling Completion'               
             }  
         }                      
-    }
-  
+    },
+
+    createNewError(errMsg, status) {
+        const error = new Error(errMsg);
+        error.response = {
+            status: status 
+        };
+        return error
+    }  
 };

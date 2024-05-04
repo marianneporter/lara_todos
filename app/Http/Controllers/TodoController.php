@@ -52,7 +52,7 @@ class TodoController extends Controller
     }
 
     public function toggleCompletion(Request $request, Todo $todo) {                
-      
+     
         $todo->completed = $request->input('completed');
         $todo->save();
     
