@@ -28,9 +28,8 @@ class LoginController extends Controller
            
             $request->session()->regenerate();  
             return redirect('/');
-        }
-       
-        Log::info('*************************login failed '); 
+        }       
+      
         return back()->with('message', 'The provided credentials do not match our records.')
                      ->onlyInput('email');      
     }
