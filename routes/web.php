@@ -5,7 +5,7 @@ use App\Http\Controllers\TodoController;
 use App\Http\Controllers\TodoListController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\Auth\RegisterController;
 
 // Public routes
 Route::get('login', [LoginController::class, 'create'])
