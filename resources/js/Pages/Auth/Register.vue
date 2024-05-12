@@ -10,7 +10,7 @@
                         Name
                     </label>
                     <input class="p-2 w-full border-2 focus:outline-none
-                                focus:border-sky-600"
+                                focus:border-sky-600 rounded"
                             type="text" 
                             v-model="form.name"
                             @input="clearError('name')" />
@@ -24,7 +24,7 @@
                         Email
                     </label>
                     <input class="border-2 focus:outline-none
-                                focus:border-sky-600 p-2 w-full"
+                                focus:border-sky-600 p-2 w-full rounded"
                             type="text" 
                             v-model="form.email"
                             @input="clearError('email')" />
@@ -39,7 +39,7 @@
                     Password
                     </label>
                     <input class="border-2 focus:outline-none
-                                focus:border-sky-600 p-2 w-full"
+                                focus:border-sky-600 p-2 w-full rounded"
                             type="password"
                             v-model="form.password"
                             @input="clearError('password')" />
@@ -54,7 +54,7 @@
                         Confirm Password
                     </label>
                     <input class="border-2 focus:outline-none
-                                focus:border-sky-600 p-2 w-full"
+                                focus:border-sky-600 p-2 w-full rounded"
                             type="password"
                             v-model="form.password_confirmation"
                             @input="clearError('password_confirmation')" />
