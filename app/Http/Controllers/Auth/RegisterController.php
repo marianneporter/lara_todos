@@ -36,6 +36,8 @@ class RegisterController extends Controller
 
         auth()->login($user);
 
-        return redirect()->route('dashboard'); 
+        return redirect()->route('dashboard')
+                         ->with('register_toast', 
+                                'Thank you for registering - Time to add some lists!');   
     }
 }

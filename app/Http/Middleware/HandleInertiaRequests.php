@@ -43,7 +43,8 @@ class HandleInertiaRequests extends Middleware
             ],
             'auth_error' => [
                 'message' => fn () => $request->session()->get('message'),
-            ]
+            ],
+            'register_toast' => fn () => $request->session()->get('register_toast'),
         ]);
     }
 }

@@ -19,7 +19,8 @@
 </template>
   
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
+import { useToast } from 'primevue/usetoast'
 import { storeToRefs } from 'pinia'
 import { useTodoListStore } from '@/Stores/todoListStore'
 import { useHandleScreenWidth } from '@/Composables/useHandleScreenWidth'
@@ -30,14 +31,22 @@ import Todos from '@/Components/Todos/Todos.vue'
 const { screenWidth } = useHandleScreenWidth()
 
 const props = defineProps({
-    message: String,
+    register_toast: String,
     todoLists: Object
 });
+
+const toast = useToast()
 
 const todoListStore = useTodoListStore()
 todoListStore.setTodoLists(props.todoLists)
 const { listSelected } = storeToRefs(todoListStore);  
 const currentTodoLists = computed(() => todoListStore.todoLists);
+
+onMounted(() => {
+    if (props.register_toast) {      
+        showRegisterSuccess(props.register_toast)
+    }
+});
 
 const todosActive = ref(false);
 const listsActive = ref(true);
@@ -65,6 +74,14 @@ const showLists = () => {
         }, 600)  
     }
 }
+ 
+const showRegisterSuccess = (message) => {    
+        toast.add({severity:'success', 
+                   summary: 'Success!',
+                   detail: message, 
+                   life: 4000
+                   });
+}  
 
 </script>
 
