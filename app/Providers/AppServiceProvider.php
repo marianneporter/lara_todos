@@ -24,14 +24,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-       // Listen for login events
-       Event::listen(Login::class, function ($event) {
-         Log::info("********!!!!!!!!!!User logged in: ", ['user_id' => $event->user->id]);
-        });
-
-    // Listen for logout events
-        Event::listen(Logout::class, function ($event) {
-            Log::info("********!!!!!!!!!!User logged out: ", ['user_id' => $event->user->id]);
-       });
+        if ($this->app->environment('production')) {
+            URL::forceScheme('https');
+        }   
     }
 }
