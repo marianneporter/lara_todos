@@ -54,7 +54,7 @@
                         </template>                          
                                                     
                         <button v-else
-                                class="outline-btn" 
+                                class="outline-btn self-center" 
                                 @click="selectListToEdit(todo.todo_list_id)">
                             edit list
                         </button>                        

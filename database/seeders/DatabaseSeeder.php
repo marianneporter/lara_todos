@@ -16,18 +16,18 @@ class DatabaseSeeder extends Seeder
         // User::factory(10)->create();
 
         User::factory()->create([
-            'name' => 'Tibbles Porter',
-            'email' => 'tibbles@test.com',
-            'password' => 'Star123456!'           
+            'name' => 'Melanie Smith',
+            'email' => 'melanie@test.com',
+            'password' => 'Demo123456!'           
         ]);
 
         User::factory()->create([
-            'name' => 'Olly Porter',
-            'email' => 'olly@test.com',
-            'password' => 'Star123456!'           
+            'name' => 'Jason Jones',
+            'email' => 'jason@test.com',
+            'password' => 'Demo123456!'           
         ]);
 
-        // other seeders
+        // call todo list seeder if necessary
         $this->call([
             TodoListSeeder::class,
         ]);
