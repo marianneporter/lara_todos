@@ -1,5 +1,6 @@
 {
     "name": "laravel/laravel",
+    "version": "11.1.0",
     "type": "project",
     "description": "The skeleton application for the Laravel framework.",
     "keywords": ["laravel", "framework"],
@@ -55,6 +56,7 @@
         }
     },
     "config": {
+        "root-version": "11.1.0",
         "optimize-autoloader": true,
         "preferred-install": "dist",
         "sort-packages": true,
