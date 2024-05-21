@@ -1,7 +1,7 @@
 <template>
-    <section class="flex-1 section-card ">   
-        <header class="flex justify-between">
-          
+    <section class="section-card"
+    :class="{'screen-width-section' : noLists}">   
+        <header class="md:flex justify-between">          
             <h3 class="list-heading">            
                 <span v-if="getListDataOptions.length <= 1">You have no lists yet</span>
                 <span v-else>My Lists </span>              
@@ -20,7 +20,7 @@
                         
             <div :class="[ listSelected.id == list.id ? 
                         'list-entry-card-selected' : 'list-entry-card']" 
-                 @click="changeSelectedList(list)">  
+              >  
               
                 <!-- editing mode -->
                 <div v-if="currentEditListId && currentEditListId === list.id" class="flex-1">
@@ -31,7 +31,8 @@
                 </div>
 
                 <!-- list mode -->
-                <div v-else class="flex w-full gap-3 items-stretch h-full">                                 
+                <div v-else class="flex w-full gap-3 items-stretch h-full"
+                     @click="changeSelectedList(list)" >                                 
 
                     <div class="flex-grow flex-shrink-0 basis-0 text-left">
                         {{ list.name }}
@@ -56,7 +57,7 @@
     import DBService from "@/Services/DBService"
     import { useTodoListStore } from '@/Stores/todoListStore'   
     import { storeToRefs } from 'pinia'
-    import { ref } from 'vue';    
+    import { ref, computed } from 'vue';    
     import { useConfirm } from 'primevue/useconfirm'
     import { useToast } from 'primevue/usetoast'
 
@@ -82,7 +83,7 @@
 
     const todoListStore = useTodoListStore()
 
-    const {  listSelected, getListDataOptions } = storeToRefs(todoListStore);  
+    const {  listSelected, getListDataOptions, getListCount } = storeToRefs(todoListStore);  
             
     const changeSelectedList = (newList) => {
         todoListStore.setListSelected(newList)  
@@ -90,6 +91,8 @@
     }    
 
     const currentEditListId = ref(0);
+
+    const noLists = computed(() => getListCount.value === 0)
    
     const editList = (event, list) => {
         currentEditListId.value = list.id   
@@ -135,3 +138,13 @@
     };
     
 </script>
+
+<style scoped>
+
+    @media (max-width: 767px) {
+        .screen-width-section {
+            max-width: 50%;    
+        }
+    }
+
+</style>

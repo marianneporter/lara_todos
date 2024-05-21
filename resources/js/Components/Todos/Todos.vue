@@ -2,7 +2,7 @@
     <section v-if="listSelected.id !== 0 || todos.length !== 0" 
              class="flex-1 section-card"  >    
         <header >
-            <div  class="flex justify-between" >
+            <div  class="md:flex justify-between" >
                 <h3 class="list-heading"> {{ getTodosHeading }} </h3>
                 <button v-if="listSelected.id !== 0 && showAddFormBtn"
                     @click="showAddTodoForm" class="cursor-pointer">
@@ -11,7 +11,11 @@
                 </button>
             </div>
             <button v-if="screenWidth <= 768"
-                    @click="emits('back-to-list-mode')"><i class="fa-solid fa-arrow-left"></i> Back to lists</button>
+                    class="mt-2 md:mt-0"
+                    @click="emits('back-to-list-mode')">
+                    <i class="fa-solid fa-arrow-left"></i>
+                Back to lists
+            </button>
         </header>
 
         <AddTodoForm ref="addTodoFormRef"

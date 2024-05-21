@@ -20,7 +20,7 @@
                 </button>
             </div>
             <button class="px-6 py-3 bg-orange-500 text-white focus:outline-none
-                         hover:bg-orange-600 transition-colors">Add New Todo
+                         hover:bg-orange-600 transition-colors">Add
             </button>
        </form>      
     </transition>
@@ -101,7 +101,7 @@
         toast.add({severity:'success', 
                    summary: 'Success!',
                    detail: `The ${task} task has been added`, 
-                   life: 6000
+                   life: 3000
         });
     }
 

@@ -3,8 +3,9 @@
 @tailwind utilities;
 
 .section-card {
-    @apply bg-gray-200 rounded-lg shadow-md p-4 
-}   
+    @apply bg-gray-200 rounded-lg shadow-md p-4
+}  
+
 
 .list-entry-card {
     @apply bg-white rounded-lg shadow-md p-4 mt-2 w-full text-left

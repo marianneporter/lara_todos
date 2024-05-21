@@ -22,6 +22,10 @@ export const useTodoListStore = defineStore('taskStore', {
             return [{ id: 0, name: 'All'}, ...this.getListData];
         },   
 
+        getListCount() {
+            return this.todoLists.length;
+        },
+
         getTodoLists() {
             return [...this.todoLists]
         },
@@ -40,6 +44,10 @@ export const useTodoListStore = defineStore('taskStore', {
                 })));
             });
             return allTodos;
+        },
+
+        getTotalTodosCount() {
+            return this.todoLists.reduce((total, list) => total + list.todos.length, 0);
         }              
     },
 

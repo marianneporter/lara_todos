@@ -10,7 +10,7 @@
         </div>
 
         <div class="self-end mt-2 gap-3">
-            <button @click="cancelListEdit" class="secondary-btn p-2">Cancel</button>
+            <button @click="cancelListEdit" type="button" class="secondary-btn p-2">Cancel</button>
             <button type="submit" class="primary-btn ml-2 p-2">Save</button>                                       
         </div>
     </form>   

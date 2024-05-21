@@ -4,7 +4,7 @@
                     text-black min-h-full">         
             <div class="panels-container"
                     :class="{'list-active': listsActive, 'todos-active': todosActive }">
-                <div class="panel max-w-screen-md">
+                <div class="panel">
                     <Lists :todoLists="todoLists" @new-list-selected="showTodos"
                             v-show="screenWidth > 767 || listsVisible"   />
                 </div>             
@@ -119,6 +119,7 @@ const showRegisterSuccess = (message) => {
 
     .panel {
         flex: 1;
+       
     }
 
     .list-active {
