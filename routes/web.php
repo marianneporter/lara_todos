@@ -12,10 +12,10 @@ Route::get('login', [LoginController::class, 'create'])
                                    ->name('login');
 Route::post('login', [LoginController::class, 'authenticate'])
                                    ->name('authenticate');
-Route::get('register', [RegisterController::class, 'showRegistrationForm'])
-                                   ->name('register.show');
-Route::post('/register', [RegisterController::class, 'register'])
-                                   ->name('register.submit');
+// Route::get('register', [RegisterController::class, 'showRegistrationForm'])
+//                                    ->name('register.show');
+// Route::post('/register', [RegisterController::class, 'register'])
+//                                    ->name('register.submit');
 Route::post('/logout', [LoginController::class, 'logout'])
                                    ->name('logout');
 Route::get('/about', function () {
