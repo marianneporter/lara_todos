@@ -23,15 +23,13 @@
        
         <div v-if="todos && todos.length > 0">
             <div v-for="todo in todos" :key="todo.id">
-                <div class="list-entry-card flex gap-2">
+                <div :class="['list-entry-card flex gap-2', { 'edit-highlight': currentEditTodoId === todo.id }]">
                   
                     <!-- editing mode -->
-                    <div v-if="currentEditTodoId && currentEditTodoId === todo.id" class="flex-1">
-                    
+                    <div v-if="currentEditTodoId && currentEditTodoId === todo.id" class="flex-1">                    
                         <UpdateTodoForm :todo="todo"
                                         :key="todo.id"
-                                        @endTodoEdit="endTodoEdit"  />                             
-
+                                        @endTodoEdit="endTodoEdit"  />
                     </div>
                     <!-- list mode -->
                     <div v-else class="flex w-full gap-3 items-stretch h-full">   
@@ -203,6 +201,11 @@
             life: 3000
         });
     };
-
-
 </script>
+
+<style scoped>
+    .edit-highlight {  
+        box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.3);     
+        transition:  box-shadow 0.3s ease-in-out;
+    }
+</style>
