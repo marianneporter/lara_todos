@@ -24,7 +24,7 @@
         <div v-if="todos && todos.length > 0">
             <div v-for="todo in todos" :key="todo.id">
                 <div class="list-entry-card flex gap-2">
-
+                  
                     <!-- editing mode -->
                     <div v-if="currentEditTodoId && currentEditTodoId === todo.id" class="flex-1">
                     

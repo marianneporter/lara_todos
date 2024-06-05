@@ -90,8 +90,9 @@
             }      
             return
         }
-          
-        todoListStore.addTodo(addedTodo)         
+   
+        todoListStore.addTodo(addedTodo)    
+        let lists = todoListStore.getTodoLists;           
         showSuccess(form.value.task)         
         closeForm()
 

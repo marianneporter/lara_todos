@@ -42,7 +42,7 @@ export default {
 
     async addTodo(todo) { 
         try {       
-            let response = await axios.post(route('todos.store'), todo)           
+            let response = await axios.post(route('todos.store'), todo)       
             return response.data.addedTodo           
         }
         catch (error) { 
@@ -68,7 +68,7 @@ export default {
         }
         catch (error) { 
             //  handle and format validation errors  
-     
+          
             let formattedError = this.formatError(error)
             throw formattedError
         }
@@ -86,7 +86,7 @@ export default {
 
     
     async toggleCompleted(todoId, newStatus) {
-        console.log('in toggle completion')
+     
         try {       
             let response = await axios.patch(route('todos.toggleCompletion',
                                             { todo: todoId }), 
@@ -102,7 +102,8 @@ export default {
         }
 
         catch (error) { 
-            //  handle and format validation errors         
+            //  handle and format validation errors  
+      
             let formattedError = this.formatError(error)
             throw formattedError
         }
@@ -124,8 +125,7 @@ export default {
             }  
         }
         else { 
-            //any other errors  
-            console.log('in server errors bit')   
+            //any other errors           
             return {
                 errorType: 'serverError',
                 errorMessage: error.message || 'Error Toggling Completion'               

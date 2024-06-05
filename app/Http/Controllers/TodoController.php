@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Todo;
 use Illuminate\Http\Request;
 
+
 class TodoController extends Controller
 {
     public function store(Request $request)
@@ -20,8 +21,11 @@ class TodoController extends Controller
 
         $todo = Todo::create([
             'task' => $request->task,
+            'completed' => false,          
             'todo_list_id' => $request->todo_list_id            
         ]); 
+
+       
 
         return response()->json(['addedTodo' => $todo], 200);
     }
@@ -34,11 +38,11 @@ class TodoController extends Controller
             'task.required' => 'Please enter a new task name',
             'task.min' => 'Task must be at least 2 characters',
             'task.max' => 'Task must be a maximum of 40 characters'
-        ]);
-       
+        ]);       
+
         $todo->task = $validated['task'];
-        $todo->completed = $request['completed'];
-        $todo->save();     
+        $todo->completed = $request['completed'];     
+        $todo->save();      
 
         return response()->json([
             'updatedTodo' => $todo,

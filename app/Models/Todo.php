@@ -10,7 +10,9 @@ class Todo extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['task', 'todo_list_id'];
+    protected $fillable = ['task', 
+                           'completed', 
+                           'todo_list_id'];
 
     public function todo_list(): BelongsTo
     {

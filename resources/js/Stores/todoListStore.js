@@ -86,8 +86,10 @@ export const useTodoListStore = defineStore('taskStore', {
             this.todoLists = this.todoLists.filter(tdl => tdl.id !== id);
         },
 
-        addTodo(todo) {                    
+        addTodo(todo) {      
+ 
             let listIndexForAdd = this.todoLists.findIndex(( tdl => tdl.id === todo.todo_list_id) )
+           
             this.todoLists[listIndexForAdd].todos.unshift(todo)
         },
 
