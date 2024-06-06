@@ -18,9 +18,7 @@
         <div v-if="getListDataOptions.length > 1" 
              v-for="list in getListDataOptions" :key="list.id">
                         
-            <div :class="[ listSelected.id == list.id ? 
-                        'list-entry-card-selected' : 'list-entry-card']" 
-              >  
+            <div :class="getListClass(list)" >  
               
                 <!-- editing mode -->
                 <div v-if="currentEditListId && currentEditListId === list.id" class="flex-1">
@@ -78,6 +76,16 @@
         showAddFormBtn.value = false
         if (addListFormRef.value) {
             addListFormRef.value.makeFormVisible();
+        }
+    }
+
+    const getListClass = (list) => {
+        if (currentEditListId.value === list.id && list.id !== 0) {
+            return 'list-entry-card edit-highlight';
+        } else if (listSelected.value.id === list.id) {
+            return 'list-entry-card-selected';
+        } else {
+            return 'list-entry-card';
         }
     }
 

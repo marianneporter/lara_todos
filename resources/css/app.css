@@ -41,3 +41,9 @@
     opacity: 1 !important;
 }
 
+/* custom highlight for inline forms when active */
+.edit-highlight {      
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+    border: 2px solid #fdba74;
+    transition: box-shadow 0.3s ease-in-out, border 0.3s ease-in-out;
+}

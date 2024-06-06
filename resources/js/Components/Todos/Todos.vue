@@ -202,10 +202,3 @@
         });
     };
 </script>
-
-<style scoped>
-    .edit-highlight {  
-        box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.3);     
-        transition:  box-shadow 0.3s ease-in-out;
-    }
-</style>

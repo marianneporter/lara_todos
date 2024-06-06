@@ -8,7 +8,7 @@
                 <input type="text" 
                     v-model="form.task"
                     @input="hideErrorToast"
-                    class="py-3 pl-4 pr-2 rounded-l-lg border-r-0 
+                    class="py-3 pl-4 pr-10 rounded-l-lg border-r-0 
                             focus:outline-none focus:ring-0 w-full" 
                     placeholder="New Task Name">
 
