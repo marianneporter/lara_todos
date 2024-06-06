@@ -3,7 +3,7 @@
         <div class="relative">
             <input type="text" v-model="form.task"
                 @input="hideErrorToast"
-                class="w-full p-1 border-2 focus:outline-none
+                class="w-full py-1 pl-1 pr-8 border-2 focus:outline-none
                       focus:border-sky-600 rounded" />
             <i class="fa-regular fa-pen-to-square absolute right-2 top-1/2
                     transform -translate-y-1/2"></i>

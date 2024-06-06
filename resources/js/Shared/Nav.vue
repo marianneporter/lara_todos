@@ -36,10 +36,10 @@
                 <div class="lg:hidden bg-white h-[0.1rem] w-32 mx-auto mt-2"></div>
 
                 <div v-if="!username" class="flex flex-col lg:flex-row items-stretch gap-4 h-full">
-                    <Link :href="route('register.show')" 
+                    <!-- <Link :href="route('register.show')" 
                           class="block px-2 hover:bg-blue-900 lg:flex lg:items-center">
                             Register
-                    </Link>
+                    </Link> -->
                     <Link :href="route('login')" 
                           class="block px-2 hover:bg-blue-900 lg:flex lg:items-center">
                             Login
